@@ -38,10 +38,10 @@ import static ru.lanit.bpm.jedu.hrjedi.domain.security.RoleName.ROLE_ADMIN;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private EmployeeRepository employeeRepository;
-    private PasswordEncoder passwordEncoder;
-    private String headOfHrLogin;
-    private RoleRepository roleRepository;
+    private final EmployeeRepository employeeRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final String headOfHrLogin;
+    private final RoleRepository roleRepository;
 
     public EmployeeServiceImpl(
         EmployeeRepository employeeRepository,

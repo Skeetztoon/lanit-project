@@ -9,31 +9,30 @@
     <name>HR Jedi</name>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
-        <jjwt.version>0.9.0</jjwt.version>
-        <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <unitils-easymock.version>3.4.6</unitils-easymock.version>
-        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-io.version>2.6</commons-io.version>
-        <camunda.version>7.12.0</camunda.version>
-        <camunda-bpm-spring-boot.version>3.4.1</camunda-bpm-spring-boot.version>
-        <mq-jms-spring-boot-starter.version>2.2.6</mq-jms-spring-boot-starter.version>
-        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
-        <groovy-all.version>3.0.3</groovy-all.version>
+        <commons-io.version>2.11.0</commons-io.version>
+        <camunda.version>7.16.0</camunda.version>
+        <camunda-bpm-spring-boot.version>7.16.0</camunda-bpm-spring-boot.version>
+        <mq-jms-spring-boot-starter.version>2.6.2</mq-jms-spring-boot-starter.version>
+        <spring-boot.version>2.6.2</spring-boot.version>
+        <groovy-all.version>3.0.8</groovy-all.version>
         <javax.mail.version>1.4.7</javax.mail.version>
-        <poi.version>4.1.2</poi.version>
+        <poi.version>5.0.0</poi.version>
+        <jaxb-impl.version>3.0.2</jaxb-impl.version>
 
         <sonar.host.url>http://jedu-sonar.bpm.lanit/</sonar.host.url>
         <sonar.scm.provider>git</sonar.scm.provider>
 
-        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>${maven-surefire-plugin.version}</maven-failsafe-plugin.version>
-        <groovy-maven-plugin.version>2.1</groovy-maven-plugin.version>
-        <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
-        <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
     </properties>
 
@@ -125,7 +124,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -185,6 +183,13 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb-impl.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.camunda.spin</groupId>
             <artifactId>camunda-spin-core</artifactId>

@@ -13,7 +13,6 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.fw.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,11 +34,15 @@ import ru.lanit.bpm.jedu.hrjedi.fw.security.jwt.JwtAuthTokenFilter;
     prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    EmployeeBasedUserDetailService userDetailsService;
+    private final EmployeeBasedUserDetailService userDetailsService;
 
-    @Autowired
-    private JwtAuthEntryPoint unauthorizedHandler;
+    private final JwtAuthEntryPoint unauthorizedHandler;
+
+    public WebSecurityConfig(EmployeeBasedUserDetailService userDetailsService,
+        JwtAuthEntryPoint unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {
@@ -60,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -74,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // login
             .antMatchers("/hr-rest/security/**").permitAll()
             // camunda webapp
-            .antMatchers("/app/**").permitAll()
+            .antMatchers("/camunda/**").permitAll()
             .antMatchers("/lib/**").permitAll()
             .antMatchers("/api/**").permitAll()
             .antMatchers("/camunda-welcome").permitAll()
