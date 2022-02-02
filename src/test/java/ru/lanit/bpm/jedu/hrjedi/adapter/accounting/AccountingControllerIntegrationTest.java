@@ -10,8 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.lanit.bpm.jedu.hrjedi.domain.Employee;
-import ru.lanit.bpm.jedu.hrjedi.domain.Vacation;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
+import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -42,6 +42,7 @@ public class AccountingControllerIntegrationTest {
     @Test
     public void success() throws Exception {
         Vacation vacation = new Vacation(EMPLOYEE_IVANOV, DATE_START, DATE_END);
+        Vacation vac = new Vacation();
 
         accountingController.createVacationDocuments(vacation);
     }

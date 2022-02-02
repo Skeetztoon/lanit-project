@@ -13,6 +13,7 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.fw.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,27 +23,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.lanit.bpm.jedu.hrjedi.fw.security.jwt.JwtAuthEntryPoint;
-import ru.lanit.bpm.jedu.hrjedi.fw.security.jwt.JwtAuthTokenFilter;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.JwtAuthEntryPoint;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.JwtAuthTokenFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
     prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private final EmployeeBasedUserDetailService userDetailsService;
-
+    private final UserDetailsService userDetailsService;
     private final JwtAuthEntryPoint unauthorizedHandler;
-
-    public WebSecurityConfig(EmployeeBasedUserDetailService userDetailsService,
-        JwtAuthEntryPoint unauthorizedHandler) {
-        this.userDetailsService = userDetailsService;
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
 
     @Bean
     public JwtAuthTokenFilter authenticationJwtTokenFilter() {

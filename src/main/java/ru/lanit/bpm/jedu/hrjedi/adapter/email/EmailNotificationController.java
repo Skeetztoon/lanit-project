@@ -18,8 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import ru.lanit.bpm.jedu.hrjedi.domain.Employee;
-import ru.lanit.bpm.jedu.hrjedi.domain.Vacation;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
+import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
 import javax.activation.DataHandler;
 import javax.mail.*;

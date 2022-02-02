@@ -23,7 +23,7 @@ import org.springframework.jms.annotation.EnableJms;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "ru.lanit.bpm.jedu.hrjedi")
-@EnableJpaRepositories(basePackages = "ru.lanit.bpm.jedu.hrjedi.adapter.hibernate")
+@EnableJpaRepositories(basePackages = "ru.lanit.bpm.jedu.hrjedi.adapter.persistence")
 @EntityScan(basePackages = "ru.lanit.bpm.jedu.hrjedi.domain")
 @EnableProcessApplication("hrJedi")
 @EnableJms

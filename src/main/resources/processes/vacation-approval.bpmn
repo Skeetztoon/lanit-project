@@ -3,23 +3,23 @@
   <bpmn2:process id="vacation-approval" isExecutable="true">
     <bpmn2:startEvent id="StartEvent_1" name="Заявка создана">
       <bpmn2:extensionElements>
-        <camunda:executionListener delegateExpression="${vacationApprovalStarted}" event="start" />
+        <camunda:executionListener delegateExpression="${vacationApprovalStartedDelegate}" event="start" />
       </bpmn2:extensionElements>
       <bpmn2:outgoing>SequenceFlow_0x2uekh</bpmn2:outgoing>
     </bpmn2:startEvent>
     <bpmn2:sequenceFlow id="SequenceFlow_0x2uekh" sourceRef="StartEvent_1" targetRef="IntermediateThrowEvent_0222ylo" />
     <bpmn2:userTask id="prepare-request" name="Заполнить заявку на отпуск" camunda:formKey="vacation-approval:prepare-request" camunda:assignee="${initiatorLogin}">
       <bpmn2:extensionElements>
-        <camunda:taskListener delegateExpression="${vacationApprovalCommonTaskCreate}" event="create" />
-        <camunda:taskListener delegateExpression="${vacationApprovalPrepareRequestComplete}" event="complete" />
+        <camunda:taskListener delegateExpression="${vacationApprovalCommonTaskCreateListener}" event="create" />
+        <camunda:taskListener delegateExpression="${vacationApprovalPrepareRequestCompleteListener}" event="complete" />
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1ircahn</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_0fqenv0</bpmn2:outgoing>
     </bpmn2:userTask>
     <bpmn2:userTask id="approve-request" name="Согласовать заявку" camunda:formKey="vacation-approval:approve-request" camunda:assignee="${approverLogin}">
       <bpmn2:extensionElements>
-        <camunda:taskListener delegateExpression="${vacationApprovalCommonTaskCreate}" event="create" />
-        <camunda:taskListener delegateExpression="${vacationApprovalApproveRequestComplete}" event="complete" />
+        <camunda:taskListener delegateExpression="${vacationApprovalCommonTaskCreateListener}" event="create" />
+        <camunda:taskListener delegateExpression="${vacationApprovalApproveRequestCompleteListener}" event="complete" />
       </bpmn2:extensionElements>
       <bpmn2:incoming>SequenceFlow_1n3hi8t</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_0q3b7s5</bpmn2:outgoing>

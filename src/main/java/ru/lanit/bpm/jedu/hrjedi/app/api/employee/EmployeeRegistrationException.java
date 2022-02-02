@@ -13,7 +13,10 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.app.api.employee;
 
+import java.io.Serial;
+
 public class EmployeeRegistrationException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 1633754699258321987L;
 
     public EmployeeRegistrationException(String message) {
