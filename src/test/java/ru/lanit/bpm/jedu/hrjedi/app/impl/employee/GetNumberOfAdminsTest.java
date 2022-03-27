@@ -33,12 +33,12 @@ import static org.junit.Assert.assertEquals;
 import static ru.lanit.bpm.jedu.hrjedi.domain.security.RoleName.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetNumberOfAdminsUseCaseTest {
+public class GetNumberOfAdminsTest {
     @Mock
     EmployeeRepository employeeRepository;
 
     @InjectMocks
-    GetNumberOfAdminsUseCase getNumberOfAdminsUseCase;
+    GetNumberOfAdmins getNumberOfAdmins;
 
     @Test
     public void getNumberOfAdmins() {
@@ -50,7 +50,7 @@ public class GetNumberOfAdminsUseCaseTest {
             user(singleton(role(ROLE_ADMIN)))
         ));
 
-        long numberOfAdmins = getNumberOfAdminsUseCase.execute();
+        long numberOfAdmins = getNumberOfAdmins.execute();
 
         assertEquals(2, numberOfAdmins);
     }

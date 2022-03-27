@@ -13,9 +13,7 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.domain.security;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -27,6 +25,8 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class Role implements Serializable {
     @Serial
     private static final long serialVersionUID = -5449326074498337967L;

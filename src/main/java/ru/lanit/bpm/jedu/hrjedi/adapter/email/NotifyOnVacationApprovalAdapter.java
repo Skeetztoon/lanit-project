@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.NotifyOnVacationApprovalOutbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
@@ -40,8 +41,8 @@ import static java.util.Collections.singletonList;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Controller
-public class EmailNotificationController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailNotificationController.class);
+public class NotifyOnVacationApprovalAdapter implements NotifyOnVacationApprovalOutbound {
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotifyOnVacationApprovalAdapter.class);
     private static final String MAIL_ENCODING = "UTF-8";
     private static final String MAIL_TYPE_HTML = "html";
     private static final String MAIL_TYPE_PNG = "image/png";
@@ -66,7 +67,8 @@ public class EmailNotificationController {
     @Value("${ru.lanit.bpm.jedu.hrjedi.email.smtp.port}")
     private String mailSmtpPort;
 
-    public void notifyOnVacationApproval(Vacation approvedVacation) {
+    @Override
+    public void execute(Vacation approvedVacation) {
         Employee employee = approvedVacation.getEmployee();
 
         LOGGER.info("Attemping to notify {} on vacation approval", employee.getLogin());
@@ -87,6 +89,10 @@ public class EmailNotificationController {
         }
         LOGGER.info("Notification of employee {} on vacation approval completed successfully", employee.getLogin());
     }
+
+    // ===================================================================================================================
+    // = Implementation
+    // ===================================================================================================================
 
     private String getFilledMessageTemplate(String templateSource, String... templateArguments) {
         try (InputStream templateStream = getClass().getResourceAsStream(templateSource)) {

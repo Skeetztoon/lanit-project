@@ -17,8 +17,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
@@ -32,6 +34,8 @@ import java.time.LocalDateTime;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attendance_id_generator")

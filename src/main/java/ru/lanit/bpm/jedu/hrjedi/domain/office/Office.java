@@ -13,8 +13,10 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.domain.office;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -22,6 +24,8 @@ import javax.persistence.*;
 @Table(name = "OFFICE")
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class Office {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "office_id_generator")

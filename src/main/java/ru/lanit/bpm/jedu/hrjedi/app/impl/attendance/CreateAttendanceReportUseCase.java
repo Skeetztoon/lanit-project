@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.app.api.attendance.CreateAttendanceReportInbound;
 
 import java.io.IOException;
@@ -13,8 +14,9 @@ import java.time.Month;
 
 @Component
 @RequiredArgsConstructor
-public class CreateAttendanceReportUseCasee implements CreateAttendanceReportInbound {
+public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbound {
 
+    @Transactional
     @Override
     public Workbook execute(Month month, int year) {
         InputStream attendanceTemplate = getClass().getResourceAsStream("/reports/attendance.xlsx");

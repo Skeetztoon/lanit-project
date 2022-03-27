@@ -11,7 +11,7 @@
  *
  * $
  */
-package ru.lanit.bpm.jedu.hrjedi.fw.security.jwt;
+package ru.lanit.bpm.jedu.hrjedi.app.impl.security.jwt;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

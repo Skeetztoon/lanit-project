@@ -13,9 +13,7 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.domain.employee;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.Role;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.State;
@@ -27,14 +25,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "EMPLOYEE", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {
-        "LOGIN"
-    })
-})
+@Table(name = "EMPLOYEE")
 @RequiredArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 public class Employee implements Serializable {
     @Serial
     private static final long serialVersionUID = -5449326074498337967L;

@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.attendance.AttendanceRepository;
+import ru.lanit.bpm.jedu.hrjedi.staging.datetimeutils.DateTimeUtils;
 
 import java.time.Month;
 import java.time.YearMonth;

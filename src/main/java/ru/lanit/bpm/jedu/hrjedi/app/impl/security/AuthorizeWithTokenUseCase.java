@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.AuthorizeWithTokenInbound;
-import ru.lanit.bpm.jedu.hrjedi.fw.security.jwt.JwtProvider;
+import ru.lanit.bpm.jedu.hrjedi.app.impl.security.jwt.JwtProvider;
 
 @Component
 @RequiredArgsConstructor
@@ -18,8 +18,8 @@ public class AuthorizeWithTokenUseCase implements AuthorizeWithTokenInbound {
     private final UserDetailsService userDetailsService;
     private final IdentityService camundaIdentityService;
 
-    @Override
     @Transactional
+    @Override
     public UserDetails execute(String token) {
         if (jwtProvider.validateJwtToken(token)) {
             String username = jwtProvider.getUserNameFromJwtToken(token);

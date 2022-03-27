@@ -26,8 +26,6 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
 import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -41,6 +39,7 @@ public class EmployeeController {
     private final FindEmployeeByLoginInbound findEmployeeByLoginInbound;
     private final FindAllEmployeesInbound findAllEmployeesInbound;
     private final GetEmployeeFullNameByLoginInbound getEmployeeFullNameByLoginInbound;
+    private final GetEmployeeAvatarInbound getEmployeeAvatarInbound;
     private final GenerateSecurePasswordInbound generateSecurePasswordInbound;
     private final ServletContext servletContext;
 
@@ -93,14 +92,11 @@ public class EmployeeController {
     @GetMapping("/current/avatar")
     public ResponseEntity<byte[]> getAvatar(@RequestAttribute String currentUser) {
         Path avatarPath = Paths.get("target", "classes", "images", currentUser + ".png");
-        try {
-            return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(servletContext.getMimeType(avatarPath.toAbsolutePath().toString())))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + avatarPath.getFileName() + "\"")
-                .body(Files.readAllBytes(avatarPath));
-        } catch (IOException e) {
-            return ResponseEntity.ok().body(null);
-        }
+        byte[] avatar = getEmployeeAvatarInbound.execute(avatarPath);
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(servletContext.getMimeType(avatarPath.toAbsolutePath().toString())))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + avatarPath.getFileName() + "\"")
+            .body(avatar);
     }
 
     @GetMapping("/generate-pass")

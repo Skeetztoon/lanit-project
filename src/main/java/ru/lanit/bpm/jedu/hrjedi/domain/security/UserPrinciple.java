@@ -15,6 +15,7 @@ package ru.lanit.bpm.jedu.hrjedi.domain.security;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -24,6 +25,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 @Getter
+@ToString
 public class UserPrinciple implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;

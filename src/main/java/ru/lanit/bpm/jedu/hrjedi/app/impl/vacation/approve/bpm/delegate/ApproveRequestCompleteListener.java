@@ -15,20 +15,20 @@ package ru.lanit.bpm.jedu.hrjedi.app.impl.vacation.approve.bpm.delegate;
 
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.springframework.stereotype.Component;
-import ru.lanit.bpm.jedu.hrjedi.adapter.email.EmailNotificationController;
+import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.NotifyOnVacationApprovalOutbound;
 import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.VacationRepository;
 import ru.lanit.bpm.jedu.hrjedi.app.impl.vacation.approve.bpm.VacationApprovalProcessAccessor;
 import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
 @Component("vacationApprovalApproveRequestCompleteListener")
 public class ApproveRequestCompleteListener extends CommonTaskCompleteListener {
-    private final EmailNotificationController notificationController;
+    private final NotifyOnVacationApprovalOutbound notifyOnVacationApprovalOutbound;
     private final VacationRepository vacationRepository;
 
     public ApproveRequestCompleteListener(VacationApprovalProcessAccessor accessor,
-        EmailNotificationController notificationController, VacationRepository vacationRepository) {
+        NotifyOnVacationApprovalOutbound notifyOnVacationApprovalOutbound, VacationRepository vacationRepository) {
         super(accessor);
-        this.notificationController = notificationController;
+        this.notifyOnVacationApprovalOutbound = notifyOnVacationApprovalOutbound;
         this.vacationRepository = vacationRepository;
     }
 
@@ -38,7 +38,7 @@ public class ApproveRequestCompleteListener extends CommonTaskCompleteListener {
         if (accessor.isApproveActionSelected(task)) {
             Vacation approvedVacation = accessor.getVacation(task);
             vacationRepository.save(approvedVacation);
-            notificationController.notifyOnVacationApproval(approvedVacation);
+            notifyOnVacationApprovalOutbound.execute(approvedVacation);
         }
     }
 }

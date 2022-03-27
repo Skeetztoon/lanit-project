@@ -11,7 +11,7 @@
  *
  * $
  */
-package ru.lanit.bpm.jedu.hrjedi.fw.security;
+package ru.lanit.bpm.jedu.hrjedi.app.impl.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.FindEmployeeByLoginInbound;
-import ru.lanit.bpm.jedu.hrjedi.app.api.employee.GetEmployeeFullNameInbound;
+import ru.lanit.bpm.jedu.hrjedi.app.impl.employee.GetEmployeeFullName;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.UserPrinciple;
 
@@ -31,10 +31,10 @@ import javax.persistence.EntityNotFoundException;
 @RequiredArgsConstructor
 public class EmployeeBasedUserDetailService implements UserDetailsService {
     private final FindEmployeeByLoginInbound findEmployeeByLoginInbound;
-    private final GetEmployeeFullNameInbound getEmployeeFullNameInbound;
+    private final GetEmployeeFullName getEmployeeFullName;
 
-    @Override
     @Transactional
+    @Override
     public UserDetails loadUserByUsername(String username) {
         try {
             Employee user = findEmployeeByLoginInbound.execute(username);
@@ -58,7 +58,7 @@ public class EmployeeBasedUserDetailService implements UserDetailsService {
             user.getLogin(),
             user.getEmail(),
             user.getHashPassword(),
-            getEmployeeFullNameInbound.execute(user),
+            getEmployeeFullName.execute(user),
             authorities
         );
     }

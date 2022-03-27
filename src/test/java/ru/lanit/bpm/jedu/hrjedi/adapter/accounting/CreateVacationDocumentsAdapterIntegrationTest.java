@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.CreateVacationDocumentsException;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
@@ -21,7 +22,7 @@ import static org.hamcrest.Matchers.containsStringIgnoringCase;
 @Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {MQAutoConfiguration.class, JmsAutoConfiguration.class})
-public class AccountingControllerIntegrationTest {
+public class CreateVacationDocumentsAdapterIntegrationTest {
     private static final Employee EMPLOYEE_IVANOV = new Employee("ivanov", "", "", "", "", "");
     private static final Employee EMPLOYEE_PETROV = new Employee("petrov", "", "", "", "", "");
     private static final Employee EMPLOYEE_SERGEEV = new Employee("sergeev", "", "", "", "", "");
@@ -32,11 +33,11 @@ public class AccountingControllerIntegrationTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private AccountingController accountingController;
+    private CreateVacationDocumentsAdapter createVacationDocumentsAdapter;
 
     @Before
     public void setUp() {
-        accountingController = new AccountingController();
+        createVacationDocumentsAdapter = new CreateVacationDocumentsAdapter();
     }
 
     @Test
@@ -44,24 +45,24 @@ public class AccountingControllerIntegrationTest {
         Vacation vacation = new Vacation(EMPLOYEE_IVANOV, DATE_START, DATE_END);
         Vacation vac = new Vacation();
 
-        accountingController.createVacationDocuments(vacation);
+        createVacationDocumentsAdapter.execute(vacation);
     }
 
     @Test
     public void employeeNotFound() throws Exception {
         Vacation vacation = new Vacation(EMPLOYEE_PETROV, DATE_START, DATE_END);
-        expectedException.expect(AccountingException.class);
+        expectedException.expect(CreateVacationDocumentsException.class);
         expectedException.expectMessage(containsStringIgnoringCase("Не найден сотрудник с идентификатором"));
 
-        accountingController.createVacationDocuments(vacation);
+        createVacationDocumentsAdapter.execute(vacation);
     }
 
     @Test
     public void responseTimeout() throws Exception {
         Vacation vacation = new Vacation(EMPLOYEE_SERGEEV, DATE_START, DATE_END);
-        expectedException.expect(AccountingException.class);
+        expectedException.expect(CreateVacationDocumentsException.class);
         expectedException.expectMessage(containsStringIgnoringCase("Не получен ответ"));
 
-        accountingController.createVacationDocuments(vacation);
+        createVacationDocumentsAdapter.execute(vacation);
     }
 }

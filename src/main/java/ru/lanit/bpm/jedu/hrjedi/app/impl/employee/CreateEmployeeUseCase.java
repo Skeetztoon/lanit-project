@@ -67,12 +67,6 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
     }
 
     private RoleName extractRoleNameFromRoleString(String roleString) {
-        return switch (roleString.trim().toLowerCase()) {
-            case "admin" -> RoleName.ROLE_ADMIN;
-            case "omni" -> RoleName.ROLE_OMNI;
-            case "hr" -> RoleName.ROLE_HR;
-            case "user" -> RoleName.ROLE_USER;
-            default -> throw new EmployeeRegistrationException("Invalid role was given for registration");
-        };
+        return RoleName.valueOf("ROLE_" + roleString.trim().toUpperCase());
     }
 }

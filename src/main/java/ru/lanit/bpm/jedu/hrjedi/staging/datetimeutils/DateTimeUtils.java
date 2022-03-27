@@ -1,4 +1,4 @@
-package ru.lanit.bpm.jedu.hrjedi.app.impl.attendance;
+package ru.lanit.bpm.jedu.hrjedi.staging.datetimeutils;
 
 import org.springframework.stereotype.Component;
 
