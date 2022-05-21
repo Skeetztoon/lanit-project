@@ -24,10 +24,9 @@ import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.SignUpFormDto;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.EmployeeAvatar;
 
 import javax.servlet.ServletContext;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -91,12 +90,11 @@ public class EmployeeController {
 
     @GetMapping("/current/avatar")
     public ResponseEntity<byte[]> getAvatar(@RequestAttribute String currentUser) {
-        Path avatarPath = Paths.get("target", "classes", "images", currentUser + ".png");
-        byte[] avatar = getEmployeeAvatarInbound.execute(avatarPath);
+        EmployeeAvatar employeeAvatar = getEmployeeAvatarInbound.execute(currentUser);
         return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(servletContext.getMimeType(avatarPath.toAbsolutePath().toString())))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + avatarPath.getFileName() + "\"")
-            .body(avatar);
+            .contentType(MediaType.parseMediaType(servletContext.getMimeType(employeeAvatar.getAvatarPath().toAbsolutePath().toString())))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + employeeAvatar.getAvatarPath().getFileName() + "\"")
+            .body(employeeAvatar.getAvatar());
     }
 
     @GetMapping("/generate-pass")

@@ -1,7 +1,7 @@
 package ru.lanit.bpm.jedu.hrjedi.app.api.employee;
 
-import java.nio.file.Path;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.EmployeeAvatar;
 
 public interface GetEmployeeAvatarInbound {
-    byte[] execute(Path path);
+    EmployeeAvatar execute(String userLogin);
 }
