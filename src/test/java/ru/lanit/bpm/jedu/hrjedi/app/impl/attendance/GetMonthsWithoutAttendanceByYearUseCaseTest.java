@@ -47,7 +47,6 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2020);
 
-        Mockito.verify(dateTimeUtils).getCurrentMonth();
         Assert.assertEquals(Arrays.asList(
             YearMonth.of(2020, Month.FEBRUARY),
             YearMonth.of(2020, Month.APRIL),
