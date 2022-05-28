@@ -1,4 +1,4 @@
-package ru.lanit.bpm.jedu.hrjedi.adapter.rest.controller;
+package ru.lanit.bpm.jedu.hrjedi.adapter.rest.vacation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
