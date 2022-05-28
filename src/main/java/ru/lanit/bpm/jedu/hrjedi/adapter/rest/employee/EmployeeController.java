@@ -91,10 +91,14 @@ public class EmployeeController {
     @GetMapping("/current/avatar")
     public ResponseEntity<byte[]> getAvatar(@RequestAttribute String currentUser) {
         EmployeeAvatar employeeAvatar = getEmployeeAvatarInbound.execute(currentUser);
-        return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(servletContext.getMimeType(employeeAvatar.getAvatarPath().toAbsolutePath().toString())))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + employeeAvatar.getAvatarPath().getFileName() + "\"")
-            .body(employeeAvatar.getAvatar());
+        if (employeeAvatar != null) {
+            return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(servletContext.getMimeType(employeeAvatar.getAvatarPath().toAbsolutePath().toString())))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + employeeAvatar.getAvatarPath().getFileName() + "\"")
+                .body(employeeAvatar.getAvatar());
+        } else {
+            return ResponseEntity.ok().body(null);
+        }
     }
 
     @GetMapping("/generate-pass")
