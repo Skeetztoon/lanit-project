@@ -141,13 +141,15 @@ public class NotifyOnVacationApprovalAdapter implements NotifyOnVacationApproval
         Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.host", mailSmtpHost);
         mailProperties.put("mail.smtp.port", mailSmtpPort);
+        mailProperties.put("mail.smtp.auth", true);
 
         return Session.getInstance(
             mailProperties,
             new Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(applicationEmailAddress, applicationEmailPassword);
+                    String applicationEmailLogin = applicationEmailAddress.substring(0, applicationEmailAddress.indexOf('@'));
+                    return new PasswordAuthentication(applicationEmailLogin, applicationEmailPassword);
                 }
             });
     }

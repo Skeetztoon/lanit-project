@@ -48,8 +48,8 @@ ru:
             mode: off
             mailAddress: yourEmail@lanit.ru #Attention: DO NOT commit your email
             smtp:
-              host: mail-m2.lan.lanit.ru
-              port: 587
+              host: mail.lan.lanit.ru
+              port: 465
 
 # logging
 logging:
