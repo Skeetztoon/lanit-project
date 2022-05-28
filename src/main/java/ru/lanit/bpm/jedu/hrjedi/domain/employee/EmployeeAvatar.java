@@ -1,12 +1,10 @@
 package ru.lanit.bpm.jedu.hrjedi.domain.employee;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.nio.file.Path;
 
-@Getter
-@Setter
+@Data
 public class EmployeeAvatar {
     private Path avatarPath;
     private byte[] avatar;
