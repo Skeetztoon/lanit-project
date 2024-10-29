@@ -33,6 +33,11 @@
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+
+        <flyway.url>jdbc:h2:./target/local_db</flyway.url>
+        <flyway.user>sa</flyway.user>
+        <flyway.password></flyway.password>
+        <flyway.locations>filesystem:src/main/resources/db/migration, filesystem:src/main/resources/db/migration/0101</flyway.locations>
     </properties>
 
     <dependencyManagement>
@@ -254,6 +259,12 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>8.1.0</version>
+            </plugin>
+
         </plugins>
     </build>
 
