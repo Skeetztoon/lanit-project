@@ -81,7 +81,7 @@ VALUES (1, 1), (2, 2), (3, 3), (4, 4), (5, 3), (6, 3), (7, 3);
 INSERT INTO OFFICE
 VALUES (next value for sq_office_id, 'Москва'),
        (next value for sq_office_id, 'Нижний Новгород'),
-       (next value for sq_office_id, 'Севастополь'),
+       (next value for sq_office_id, 'Диптаун'),
        (next value for sq_office_id, 'Уфа');
 
 INSERT INTO ATTENDANCE
