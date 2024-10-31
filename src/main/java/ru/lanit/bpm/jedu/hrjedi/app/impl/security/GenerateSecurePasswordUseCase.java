@@ -1,35 +1,30 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.security;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
+import org.passay.CharacterRule;
+import org.passay.PasswordGenerator;
+import org.passay.EnglishCharacterData;
 import org.springframework.stereotype.Component;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
 
-import java.lang.reflect.InvocationTargetException;
-
-import static java.util.Arrays.asList;
+import java.util.Arrays;
 
 @Component
 public class GenerateSecurePasswordUseCase implements GenerateSecurePasswordInbound {
-    /**
-     * Legacy code used to load classes by reflection
-     *
-     * @return secure password
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public String execute() {
         try {
-            Class digitsRuleClass = getClass().getClassLoader().loadClass("org.passay.DigitCharacterRule");
-            Class loweCharsRuleClass = getClass().getClassLoader().loadClass("org.passay.LowercaseCharacterRule");
-            Class upperCharsRuleClass = getClass().getClassLoader().loadClass("org.passay.UppercaseCharacterRule");
-            Class passwordGeneratorClass = getClass().getClassLoader().loadClass("org.passay.PasswordGenerator");
-            Object digits = digitsRuleClass.getConstructor(int.class).newInstance(2);
-            Object lowerChars = loweCharsRuleClass.getConstructor(int.class).newInstance(4);
-            Object upperChars = upperCharsRuleClass.getConstructor(int.class).newInstance(2);
-            Object passwordGenerator = passwordGeneratorClass.newInstance();
-            return (String) MethodUtils.invokeMethod(passwordGenerator, "generatePassword", 8, asList(digits, lowerChars, upperChars));
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Unable to load library", e);
+            CharacterRule digitsRule = new CharacterRule(EnglishCharacterData.Digit);
+            digitsRule.setNumberOfCharacters(2);
+            CharacterRule lowerCharsRule = new CharacterRule(EnglishCharacterData.LowerCase);
+            lowerCharsRule.setNumberOfCharacters(4);
+            CharacterRule upperCharsRule = new CharacterRule(EnglishCharacterData.UpperCase);
+            upperCharsRule.setNumberOfCharacters(2);
+
+            PasswordGenerator passwordGenerator = new PasswordGenerator();
+
+            return passwordGenerator.generatePassword(8, Arrays.asList(digitsRule, lowerCharsRule, upperCharsRule));
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to generate password", e);
         }
     }
 }
