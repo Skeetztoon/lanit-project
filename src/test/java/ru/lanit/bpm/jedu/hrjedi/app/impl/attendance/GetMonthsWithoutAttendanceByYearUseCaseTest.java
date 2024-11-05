@@ -13,8 +13,6 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.app.impl.attendance;
 
-import org.apache.commons.collections4.SetUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,12 +24,24 @@ import ru.lanit.bpm.jedu.hrjedi.staging.datetimeutils.DateTimeUtils;
 
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.Arrays;
-import java.util.Collections;
+
+import static java.util.Collections.emptyList;
+import static java.util.Arrays.asList;
 import java.util.List;
+
+import static org.apache.commons.collections4.SetUtils.hashSet;
+import static org.junit.Assert.assertEquals;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetMonthsWithoutAttendanceByYearUseCaseTest {
+
+    private static final int YEAR_2020 = 2020;
+    private static final int YEAR_2021 = 2021;
+    private static final YearMonth JANUARY_2020 = YearMonth.of(YEAR_2020, Month.JANUARY);
+    private static final YearMonth NOVEMBER_2020 = YearMonth.of(YEAR_2020, Month.NOVEMBER);
+    private static final YearMonth JANUARY_2021 = YearMonth.of(YEAR_2021, Month.JANUARY);
+
     @Mock
     private DateTimeUtils dateTimeUtils;
     @Mock
@@ -40,62 +50,64 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
     @InjectMocks
     protected GetMonthsWithoutAttendanceByYearUseCase getMonthsWithoutAttendanceByYearUseCase;
 
+    public List<YearMonth> monthsWithoutAttendanceResult(int year) {
+        return getMonthsWithoutAttendanceByYearUseCase.execute(year);
+    }
+
+    private void setCurrentMonth(YearMonth yearMonth) {
+        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(yearMonth);
+    }
+
+    private void mockAttendanceData(int year, java.util.Set<Integer> monthNumbers) {
+        Mockito.when(attendanceRepository.findMonthsValuesWithAttendanceInfoByYear(year)).thenReturn(monthNumbers);
+    }
+
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear() {
-        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(YearMonth.of(2020, Month.NOVEMBER));
-        Mockito.when(attendanceRepository.findMonthsValuesWithAttendanceInfoByYear(2020)).thenReturn(SetUtils.hashSet(1, 3, 5, 7, 8, 9));
+        setCurrentMonth(NOVEMBER_2020);
+        mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9));
 
-        List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2020);
-
-        Assert.assertEquals(Arrays.asList(
-            YearMonth.of(2020, Month.FEBRUARY),
-            YearMonth.of(2020, Month.APRIL),
-            YearMonth.of(2020, Month.JUNE),
-            YearMonth.of(2020, Month.OCTOBER)
-        ), monthsWithoutAttendanceInfo);
+        assertEquals(asList(
+            YearMonth.of(YEAR_2020, Month.FEBRUARY),
+            YearMonth.of(YEAR_2020, Month.APRIL),
+            YearMonth.of(YEAR_2020, Month.JUNE),
+            YearMonth.of(YEAR_2020, Month.OCTOBER)
+        ), monthsWithoutAttendanceResult(YEAR_2020));
     }
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear_allRequiredMonthWithAttendanceInfo() {
-        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(YearMonth.of(2020, Month.NOVEMBER));
-        Mockito.when(attendanceRepository.findMonthsValuesWithAttendanceInfoByYear(2020)).thenReturn(SetUtils.hashSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        setCurrentMonth(NOVEMBER_2020);
+        mockAttendanceData(YEAR_2020, hashSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
-        List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2020);
-
-        Assert.assertEquals(Collections.emptyList(), monthsWithoutAttendanceInfo);
+        assertEquals(emptyList(), monthsWithoutAttendanceResult(YEAR_2020));
     }
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureYear() {
-        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(YearMonth.of(2020, Month.NOVEMBER));
+        setCurrentMonth(NOVEMBER_2020);
 
-        List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2021);
-
-        Assert.assertEquals(Collections.emptyList(), monthsWithoutAttendanceInfo);
+        assertEquals(emptyList(), monthsWithoutAttendanceResult(YEAR_2021));
     }
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureCurrentJanuary() {
-        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(YearMonth.of(2020, Month.JANUARY));
+        setCurrentMonth(JANUARY_2020);
 
-        List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2020);
-
-        Assert.assertEquals(Collections.emptyList(), monthsWithoutAttendanceInfo);
+        assertEquals(emptyList(), monthsWithoutAttendanceResult(YEAR_2020));
     }
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_forPastYear() {
-        Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(YearMonth.of(2021, Month.JANUARY));
-        Mockito.when(attendanceRepository.findMonthsValuesWithAttendanceInfoByYear(2020)).thenReturn(SetUtils.hashSet(1, 3, 5, 7, 8, 9, 11));
+        setCurrentMonth(JANUARY_2021);
+        mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9, 11));
 
-        List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(2020);
-
-        Assert.assertEquals(Arrays.asList(
-            YearMonth.of(2020, Month.FEBRUARY),
-            YearMonth.of(2020, Month.APRIL),
-            YearMonth.of(2020, Month.JUNE),
-            YearMonth.of(2020, Month.OCTOBER),
-            YearMonth.of(2020, Month.DECEMBER)
-        ), monthsWithoutAttendanceInfo);
+        assertEquals(asList(
+            YearMonth.of(YEAR_2020, Month.FEBRUARY),
+            YearMonth.of(YEAR_2020, Month.APRIL),
+            YearMonth.of(YEAR_2020, Month.JUNE),
+            YearMonth.of(YEAR_2020, Month.OCTOBER),
+            YearMonth.of(YEAR_2020, Month.DECEMBER)
+        ), monthsWithoutAttendanceResult(YEAR_2020));
     }
 }
