@@ -44,11 +44,15 @@ public class EmployeeController {
 
     @PostMapping("/current/update-email")
     public ResponseEntity<String> updateEmail(@RequestAttribute String currentUser, @RequestBody String email) {
-        if (StringUtils.hasLength(email)) {
+        final String emailPattern = "^[a-zA-Z0-9А-Яа-я.-]+@[a-zA-Z0-9А-Яа-я.-]+\\.[a-zA-Z]{2,}$";
+        if (!StringUtils.hasLength(email)) {
+            return ResponseEntity.badRequest().body("Email is empty");
+        }
+        if (email.matches(emailPattern)) {
             updateEmployeeEmailInbound.execute(currentUser, email);
             return ResponseEntity.ok("Email changed!");
         } else {
-            return ResponseEntity.badRequest().body("Email is empty");
+            return ResponseEntity.badRequest().body("Email is invalid");
         }
     }
 
