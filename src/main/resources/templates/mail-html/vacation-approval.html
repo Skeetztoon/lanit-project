@@ -1,7 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Jedi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 600px;
+            font-size: 16px;
+            color: #455A64;
+        }
+        .header {
+            background-color: #FFE22E;
+            color: #455A64;
+            padding: 20px;
+            font-size: 42px;
+            display: flex;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            font-size: 12px;
+            text-align: center;
+            color: #918c8c;
+            padding: 10px 20px;
+        }
+        .link {
+            color: #0073e6;
+            text-decoration: none;
+        }
+    </style>
+</head>
 <body>
-    %1s %2s %3s
+<div class="container">
+    <div class="header">
+        <img src="cid:hrjedilogo" width="60" height="60" alt="hrjedilogo">
+        HR Jedi
+    </div>
+    <div class="content">
+        <p>Привет, %s!</p>
+        <p>Твоя заявка на отпуск <strong>%s - %s</strong> была согласована.<br>
+            Дополнительную информацию по отпускам можно найти <a href="#" class="link">тут</a>.</p>
+        <p>Приятного отдыха!</p>
+    </div>
+    <div class="footer">
+        Данное письмо оформировано автоматически и не требует ответа
+    </div>
+</div>
 </body>
 </html>
-
