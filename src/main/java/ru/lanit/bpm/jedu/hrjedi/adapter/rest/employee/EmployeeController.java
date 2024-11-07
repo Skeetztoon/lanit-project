@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.SignUpFormDto;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
@@ -39,6 +40,7 @@ public class EmployeeController {
     private final FindAllEmployeesInbound findAllEmployeesInbound;
     private final GetEmployeeFullNameByLoginInbound getEmployeeFullNameByLoginInbound;
     private final GetEmployeeAvatarInbound getEmployeeAvatarInbound;
+    private final SetEmployeeAvatarInbound setEmployeeAvatarInbound;
     private final GenerateSecurePasswordInbound generateSecurePasswordInbound;
     private final ServletContext servletContext;
 
@@ -98,6 +100,19 @@ public class EmployeeController {
                 .body(employeeAvatar.getAvatar());
         } else {
             return ResponseEntity.ok().body(null);
+        }
+    }
+
+    @PostMapping("/current/update-avatar")
+    public ResponseEntity<String> uploadAvatar(@RequestParam("avatar") MultipartFile file, @RequestAttribute String currentUser) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is absent");
+        }
+        boolean isSaved = setEmployeeAvatarInbound.execute(file, currentUser);
+        if (isSaved) {
+            return ResponseEntity.ok("File saved successfully");
+        } else {
+            return ResponseEntity.ok().body("Error saving file");
         }
     }
 
