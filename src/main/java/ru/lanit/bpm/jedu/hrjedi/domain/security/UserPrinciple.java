@@ -13,6 +13,7 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.domain.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ public class UserPrinciple implements UserDetails {
     private final Long id;
     private final String login;
     private final String email;
+    @JsonIgnore
     private final String password;
     private final String fullName;
     private final Collection<? extends GrantedAuthority> authorities;
