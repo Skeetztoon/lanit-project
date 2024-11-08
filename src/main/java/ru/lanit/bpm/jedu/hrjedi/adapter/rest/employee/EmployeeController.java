@@ -18,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.SignUpFormDto;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
@@ -44,15 +43,11 @@ public class EmployeeController {
 
     @PostMapping("/current/update-email")
     public ResponseEntity<String> updateEmail(@RequestAttribute String currentUser, @RequestBody String email) {
-        final String emailPattern = "^[a-zA-Z0-9А-Яа-я.-]+@[a-zA-Z0-9А-Яа-я.-]+\\.[a-zA-Z]{2,}$";
-        if (!StringUtils.hasLength(email)) {
-            return ResponseEntity.badRequest().body("Email is empty");
-        }
-        if (email.matches(emailPattern)) {
+        try{
             updateEmployeeEmailInbound.execute(currentUser, email);
             return ResponseEntity.ok("Email changed!");
-        } else {
-            return ResponseEntity.badRequest().body("Email is invalid");
+        } catch (InvalidEmailException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
