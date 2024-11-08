@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.FindEmployeeByLoginInbound;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.UpdateEmployeeEmailInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
@@ -17,8 +18,13 @@ public class UpdateEmployeeEmailUseCase implements UpdateEmployeeEmailInbound {
     @Transactional
     @Override
     public void execute(String login, String email) {
-        Employee employee = findEmployeeByLoginInbound.execute(login);
-        employee.setEmail(email);
-        employeeRepository.save(employee);
+        final String emailPattern = "^[a-zA-Z0-9А-Яа-я.-]+@[a-zA-Z0-9А-Яа-я.-]+$";
+        if (email.matches(emailPattern)) {
+            Employee employee = findEmployeeByLoginInbound.execute(login);
+            employee.setEmail(email);
+            employeeRepository.save(employee);
+        } else {
+            throw new InvalidEmailException("Provided email address is not valid");
+        }
     }
 }
