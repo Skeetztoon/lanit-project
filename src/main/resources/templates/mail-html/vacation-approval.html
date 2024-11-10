@@ -4,51 +4,73 @@
     <meta charset="UTF-8">
     <title>HR Jedi</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: Arial, sans-serif;
         }
+
         .container {
-            width: 600px;
-            font-size: 16px;
-            color: #455A64;
-        }
-        .header {
+            width: fit-content;
             background-color: #FFE22E;
+            padding-bottom: 6px;
+        }
+
+        .header {
             color: #455A64;
-            padding: 20px;
-            font-size: 42px;
+            padding: 12px 6px;
+            font-size: 46px;
             display: flex;
         }
+
         .content {
-            padding: 20px;
+            padding: 8px;
+            font-size: 18px;
+            color: #455A64;
+            line-height: 1;
         }
+
         .footer {
-            font-size: 12px;
-            text-align: center;
-            color: #918c8c;
-            padding: 10px 20px;
-        }
-        .link {
+                font-size: 8px;
+                text-align: center;
+                color: #918c8c;
+            }
+
+        a {
             color: #0073e6;
             text-decoration: none;
         }
+
+        .box {
+                background-color: white;
+                margin-left: 6px;
+                margin-right: 6px;
+            }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div class="header">
-        <img src="cid:hrjedilogo" width="60" height="60" alt="hrjedilogo">
+        <img src="cid:hrjedilogo" width="60" height="60" alt="logo">
         HR Jedi
     </div>
-    <div class="content">
-        <p>Привет, %s!</p>
-        <p>Твоя заявка на отпуск <strong>%s - %s</strong> была согласована.<br>
-            Дополнительную информацию по отпускам можно найти <a href="#" class="link">тут</a>.</p>
-        <p>Приятного отдыха!</p>
-    </div>
-    <div class="footer">
-        Данное письмо оформировано автоматически и не требует ответа
+    <div class="box">
+        <div class="content">
+            <p style="margin-bottom: 24px">Привет, %s!</p>
+            <p style="margin-bottom: 24px">Твоя заявка на отпуск <strong>%s - %s</strong> была согласована.<br>
+                Дополнительную информацию по отпускам можно найти <a href="#">тут</a>.</p>
+            <p style="margin-bottom: 18px">Приятного отдыха!</p>
+        </div>
+        <div class="footer">
+            Данное письмо сформировано автоматически и не требует ответа
+        </div>
     </div>
 </div>
+
 </body>
 </html>
