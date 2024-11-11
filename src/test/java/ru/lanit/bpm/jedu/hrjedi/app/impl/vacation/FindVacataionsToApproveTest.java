@@ -26,11 +26,10 @@ public class FindVacataionsToApproveTest {
 
     @Test
     public void findVacationsToApprove_tasksFound() {
-        String approverLogin = "tester";
 
+        String approverLogin = "tester";
         Task task1 = Mockito.mock(Task.class);
         Task task2 = Mockito.mock(Task.class);
-
         TaskQuery taskQuery = Mockito.mock(TaskQuery.class);
 
         Mockito.when(task1.getProcessInstanceId()).thenReturn("id1");
@@ -50,8 +49,8 @@ public class FindVacataionsToApproveTest {
 
     @Test
     public void findVacationsToApprove_noTasks() {
-        String approverLogin = "tester";
 
+        String approverLogin = "tester";
         TaskQuery taskQuery = Mockito.mock(TaskQuery.class);
 
         Mockito.when(taskService.createTaskQuery()).thenReturn(taskQuery);
