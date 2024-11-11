@@ -52,8 +52,10 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear() {
+
         setCurrentMonth(NOVEMBER_2020);
         mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9));
+
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2020);
 
         assertEquals(asList(
@@ -66,8 +68,10 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear_allRequiredMonthWithAttendanceInfo() {
+
         setCurrentMonth(NOVEMBER_2020);
         mockAttendanceData(YEAR_2020, hashSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2020);
 
         assertEquals(emptyList(), monthsWithoutAttendanceInfo);
@@ -75,7 +79,9 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureYear() {
+
         setCurrentMonth(NOVEMBER_2020);
+
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2021);
 
         assertEquals(emptyList(), monthsWithoutAttendanceInfo);
@@ -83,7 +89,9 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureCurrentJanuary() {
+
         setCurrentMonth(JANUARY_2020);
+
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2020);
 
         assertEquals(emptyList(), monthsWithoutAttendanceInfo);
@@ -91,8 +99,10 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_forPastYear() {
+
         setCurrentMonth(JANUARY_2021);
         mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9, 11));
+
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2020);
 
         assertEquals(asList(
