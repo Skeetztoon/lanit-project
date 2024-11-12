@@ -48,11 +48,10 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
     private AttendanceRepository attendanceRepository;
 
     @InjectMocks
-    protected GetMonthsWithoutAttendanceByYearUseCase getMonthsWithoutAttendanceByYearUseCase;
+    private GetMonthsWithoutAttendanceByYearUseCase getMonthsWithoutAttendanceByYearUseCase;
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear() {
-
         setCurrentMonth(NOVEMBER_2020);
         mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9));
 
@@ -68,7 +67,6 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_currentYear_allRequiredMonthWithAttendanceInfo() {
-
         setCurrentMonth(NOVEMBER_2020);
         mockAttendanceData(YEAR_2020, hashSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
 
@@ -79,7 +77,6 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureYear() {
-
         setCurrentMonth(NOVEMBER_2020);
 
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2021);
@@ -89,7 +86,6 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_futureCurrentJanuary() {
-
         setCurrentMonth(JANUARY_2020);
 
         List<YearMonth> monthsWithoutAttendanceInfo = getMonthsWithoutAttendanceByYearUseCase.execute(YEAR_2020);
@@ -99,7 +95,6 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
 
     @Test
     public void getMonthsWithoutAttendanceInfoByYear_forPastYear() {
-
         setCurrentMonth(JANUARY_2021);
         mockAttendanceData(YEAR_2020, hashSet(1, 3, 5, 7, 8, 9, 11));
 
@@ -113,11 +108,9 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
             YearMonth.of(YEAR_2020, Month.DECEMBER)
         ), monthsWithoutAttendanceInfo);
     }
-
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
-
     private void setCurrentMonth(YearMonth yearMonth) {
         Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(yearMonth);
     }
