@@ -14,7 +14,6 @@
 
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,10 +23,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
+import static org.junit.Assert.*;
+
 @RunWith(SpringRunner.class)
 public class UpdateEmployeeEmailTest {
 
-    public static final String USER = "User";
+    private static final String USER = "User";
 
    @Mock
    EmployeeRepository employeeRepository;
@@ -41,7 +42,6 @@ public class UpdateEmployeeEmailTest {
 
     @Test
     public void emailUpdate_validLatinWithDash() {
-
         String email = "asd-123@gmad.ti";
         Employee employee = new Employee();
         employee.setLogin(USER);
@@ -50,13 +50,12 @@ public class UpdateEmployeeEmailTest {
 
         updateEmployeeEmailUseCase.execute(USER, email);
 
-        Assert.assertEquals(email, employee.getEmail());
+        assertEquals(email, employee.getEmail());
         Mockito.verify(employeeRepository).save(employee);
     }
 
     @Test
     public void emailUpdate_validCyrilicWithDot() {
-
         String email = "привет.мир@почта.ру";
         Employee employee = new Employee();
         employee.setLogin(USER);
@@ -65,43 +64,40 @@ public class UpdateEmployeeEmailTest {
 
         updateEmployeeEmailUseCase.execute(USER, email);
 
-        Assert.assertEquals(email, employee.getEmail());
+        assertEquals(email, employee.getEmail());
         Mockito.verify(employeeRepository).save(employee);
     }
 
     @Test
     public void emailUpdate_invalidNoPrefix() {
-
         String email = "@mail.ti";
         Employee employee = new Employee();
         employee.setLogin(USER);
 
         Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
-        Assert.assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
+        assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
 
     @Test
     public void emailUpdate_invalidNoPostfix() {
-
         String email = "asd@";
         Employee employee = new Employee();
         employee.setLogin(USER);
 
         Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
-        Assert.assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
+        assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
 
     @Test
     public void emailUpdate_invalidDoubleAt() {
-
         String email = "asd@@mail.com";
         Employee employee = new Employee();
         employee.setLogin(USER);
 
         Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
-        Assert.assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
+        assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
 }

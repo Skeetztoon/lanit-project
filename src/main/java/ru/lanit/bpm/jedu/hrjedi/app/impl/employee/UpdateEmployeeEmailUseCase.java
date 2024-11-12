@@ -14,11 +14,11 @@ import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 public class UpdateEmployeeEmailUseCase implements UpdateEmployeeEmailInbound {
     private final FindEmployeeByLoginInbound findEmployeeByLoginInbound;
     private final EmployeeRepository employeeRepository;
+    static String emailPattern = "^[a-zA-Z0-9А-Яа-я.-]+@[a-zA-Z0-9А-Яа-я.-]+$";
 
     @Transactional
     @Override
     public void execute(String login, String email) {
-        final String emailPattern = "^[a-zA-Z0-9А-Яа-я.-]+@[a-zA-Z0-9А-Яа-я.-]+$";
         if (email.matches(emailPattern)) {
             Employee employee = findEmployeeByLoginInbound.execute(login);
             employee.setEmail(email);

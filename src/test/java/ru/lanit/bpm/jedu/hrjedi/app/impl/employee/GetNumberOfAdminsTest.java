@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
-import ru.lanit.bpm.jedu.hrjedi.app.api.employee.FindEmployeeByLoginInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.Role;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.RoleName;
