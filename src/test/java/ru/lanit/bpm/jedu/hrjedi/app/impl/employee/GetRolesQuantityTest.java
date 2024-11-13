@@ -1,6 +1,5 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import camundajar.impl.scala.math.BigInt;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

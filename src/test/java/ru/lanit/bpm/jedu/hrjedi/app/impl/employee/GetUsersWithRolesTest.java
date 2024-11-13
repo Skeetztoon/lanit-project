@@ -9,9 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Arrays.asList;
