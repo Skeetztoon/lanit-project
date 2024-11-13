@@ -6,6 +6,7 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -37,4 +38,10 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     public boolean existsByEmail(String email) {
         return employeeJpaRepository.existsByEmail(email);
     }
+
+    @Override
+    public List<Map<String, Object>> getRolesQuantity() { return  employeeJpaRepository.getRolesQuantity(); }
+
+    @Override
+    public List<Map<String, Object>> getUsersWithRoles() { return  employeeJpaRepository.getUsersWithRoles(); }
 }

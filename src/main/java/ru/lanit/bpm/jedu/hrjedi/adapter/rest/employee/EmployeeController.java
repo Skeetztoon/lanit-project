@@ -28,6 +28,7 @@ import ru.lanit.bpm.jedu.hrjedi.domain.employee.EmployeeAvatar;
 
 import javax.servlet.ServletContext;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/hr-rest/employees")
@@ -41,6 +42,8 @@ public class EmployeeController {
     private final GetEmployeeAvatarInbound getEmployeeAvatarInbound;
     private final GenerateSecurePasswordInbound generateSecurePasswordInbound;
     private final ServletContext servletContext;
+    private final GetUsersWithRolesInbound getUsersWithRolesInbound;
+    private final GetRolesQuantityInbound getRolesQuantityInbound;
 
     @PostMapping("/current/update-email")
     public ResponseEntity<String> updateEmail(@RequestAttribute String currentUser, @RequestBody String email) {
@@ -105,4 +108,12 @@ public class EmployeeController {
     public String generateSecurePassword() {
         return generateSecurePasswordInbound.execute();
     }
+
+    @GetMapping("/employee-count-by-role")
+    @PreAuthorize("hasRole('OMNI') or hasRole('ADMIN') or hasRole('HR')")
+    public Map<String, Long> getRolesQuantity() { return getRolesQuantityInbound.execute(); }
+
+    @GetMapping("/employee-with-role")
+    @PreAuthorize("hasRole('OMNI') or hasRole('ADMIN') or hasRole('HR')")
+    public List<Map<String, Object>> getUsersWithRoles() { return getUsersWithRolesInbound.execute(); }
 }
