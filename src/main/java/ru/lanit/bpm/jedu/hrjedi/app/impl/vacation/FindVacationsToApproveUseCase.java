@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.stereotype.Component;
+import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.FindVacationsToApproveException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.FindVacationsToApproveInbound;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class FindVacationsToApproveUseCase implements FindVacationsToApproveInbo
             List<Task> tasks = taskService.createTaskQuery().processVariableValueEquals("approverLogin", approverLogin).active().list();
             return tasks.stream().map(Task::getProcessInstanceId).collect(Collectors.toSet());
         } catch (Exception e) {
-            return Collections.emptySet();
+            throw new FindVacationsToApproveException("Error finding vacations", e);
         }
     }
 }
