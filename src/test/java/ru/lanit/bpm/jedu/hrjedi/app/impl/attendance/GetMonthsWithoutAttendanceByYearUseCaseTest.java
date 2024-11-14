@@ -108,9 +108,11 @@ public class GetMonthsWithoutAttendanceByYearUseCaseTest {
             YearMonth.of(YEAR_2020, Month.DECEMBER)
         ), monthsWithoutAttendanceInfo);
     }
+
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
+
     private void setCurrentMonth(YearMonth yearMonth) {
         Mockito.when(dateTimeUtils.getCurrentMonth()).thenReturn(yearMonth);
     }
