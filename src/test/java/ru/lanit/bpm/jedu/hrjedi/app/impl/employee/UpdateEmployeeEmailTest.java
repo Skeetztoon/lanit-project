@@ -20,24 +20,27 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.FindEmployeeByLoginInbound;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class UpdateEmployeeEmailTest {
-
     private static final String USER = "User";
 
    @Mock
-   EmployeeRepository employeeRepository;
+   private EmployeeRepository employeeRepository;
 
     @Mock
-    FindEmployeeByLoginInbound findEmployeeByLoginInbound;
+    private FindEmployeeByLoginInbound findEmployeeByLoginInbound;
 
    @InjectMocks
-   UpdateEmployeeEmailUseCase updateEmployeeEmailUseCase;
+   private UpdateEmployeeEmailUseCase updateEmployeeEmailUseCase;
 
 
     @Test
@@ -46,7 +49,7 @@ public class UpdateEmployeeEmailTest {
         Employee employee = new Employee();
         employee.setLogin(USER);
 
-        Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
+        when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
         updateEmployeeEmailUseCase.execute(USER, email);
 
@@ -60,7 +63,7 @@ public class UpdateEmployeeEmailTest {
         Employee employee = new Employee();
         employee.setLogin(USER);
 
-        Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
+        when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
         updateEmployeeEmailUseCase.execute(USER, email);
 
@@ -74,7 +77,7 @@ public class UpdateEmployeeEmailTest {
         Employee employee = new Employee();
         employee.setLogin(USER);
 
-        Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
+        when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
         assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
@@ -85,7 +88,7 @@ public class UpdateEmployeeEmailTest {
         Employee employee = new Employee();
         employee.setLogin(USER);
 
-        Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
+        when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
         assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
@@ -96,7 +99,7 @@ public class UpdateEmployeeEmailTest {
         Employee employee = new Employee();
         employee.setLogin(USER);
 
-        Mockito.when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
+        when(findEmployeeByLoginInbound.execute(USER)).thenReturn(employee);
 
         assertThrows(InvalidEmailException.class, () -> updateEmployeeEmailUseCase.execute(USER, email));
     }
