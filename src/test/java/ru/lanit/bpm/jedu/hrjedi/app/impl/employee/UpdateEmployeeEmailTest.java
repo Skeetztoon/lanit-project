@@ -33,14 +33,14 @@ import static org.mockito.Mockito.when;
 public class UpdateEmployeeEmailTest {
     private static final String USER = "User";
 
-   @Mock
-   private EmployeeRepository employeeRepository;
+    @Mock
+    private EmployeeRepository employeeRepository;
 
     @Mock
     private FindEmployeeByLoginInbound findEmployeeByLoginInbound;
 
-   @InjectMocks
-   private UpdateEmployeeEmailUseCase updateEmployeeEmailUseCase;
+    @InjectMocks
+    private UpdateEmployeeEmailUseCase updateEmployeeEmailUseCase;
 
 
     @Test
