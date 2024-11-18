@@ -1,7 +1,13 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.attendance;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
@@ -9,12 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.attendance.AttendanceRepositoryAdapter;
 import ru.lanit.bpm.jedu.hrjedi.app.api.attendance.CreateAttendanceReportInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.attendance.Attendance;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.Month;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -120,13 +130,15 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
         }
     }
 
-    //=================================
-    // Implementation
-    //=================================
+    // ===================================================================================================================
+    // = Implementation
+    // ===================================================================================================================
+
     private String getCredentials(Attendance attendance) {
-        return attendance.getEmployee().getLastName() + " " +
-            attendance.getEmployee().getFirstName() + " " +
-            attendance.getEmployee().getPatronymic();
+        Employee employee = attendance.getEmployee();
+        return (employee.getLastName() != null ? employee.getLastName() : "") + " " +
+            (employee.getLastName() != null ? employee.getFirstName() : "") +
+            (employee.getPatronymic() != null ? " " + employee.getPatronymic() : "");
     }
 
     private void setRowData(Attendance attendance, Cell credentials, Cell entrance, Cell exit, Cell officeId) {
