@@ -23,13 +23,16 @@ camunda.bpm:
   id-generator: simple
 
 # JMS Connection
-#ibm:
-#  mq:
-#    queueManager: todo
-#    channel: todo
-#    connName: todo
-#    user: todo
-#    password: todo
+ibm:
+  mq:
+    queueManager: MGRMQ
+    channel: CHNL
+    connName: jedu-stubs.bpm.lanit(1451)
+    user:
+    password:
+    queues:
+      in: YURLOV.IN
+      out: YURLOV.OUT
 
 # App Properties
 ru:
