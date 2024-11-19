@@ -3,6 +3,7 @@ package ru.lanit.bpm.jedu.hrjedi.adapter.accounting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import ru.lanit.bpm.jedu.hrjedi.app.api.vacation.CreateVacationDocumentsException;
@@ -25,23 +26,25 @@ public class CreateVacationDocumentsAdapter implements CreateVacationDocumentsOu
     private static final Logger LOGGER = LoggerFactory.getLogger(CreateVacationDocumentsAdapter.class);
     private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    @Value("${ru.lanit.bpm.jedu.hrjedi.queues.2t-cv-request}")
+    private String inQueue;
+
+    @Value("${ru.lanit.bpm.jedu.hrjedi.queues.2t-cv-response}")
+    private String outQueue;
+
     @Autowired
     public JmsTemplate jmsTemplate;
 
     public void execute(Vacation vacation) throws CreateVacationDocumentsException {
         Employee employee = vacation.getEmployee();
-
-        LOGGER.info("Attempting to send request on {} vacation", employee.getLogin());
-
         String login = employee.getLogin();
-        String startDate = vacation.getStart().format(DAY_FORMATTER);
-        String endDate = vacation.getEnd().format(DAY_FORMATTER);
+        LOGGER.info("Attempting to send request on {} vacation", login);
 
         try {
             CreateVacationDocumentsRq request = new CreateVacationDocumentsRq();
             request.setLogin(login);
-            request.setStartDate(startDate);
-            request.setEndDate(endDate);
+            request.setStartDate(vacation.getStart().format(DAY_FORMATTER));
+            request.setEndDate(vacation.getEnd().format(DAY_FORMATTER));
             sendRequest(request);
 
             CreateVacationDocumentsRs response = receiveResponse();
@@ -77,12 +80,12 @@ public class CreateVacationDocumentsAdapter implements CreateVacationDocumentsOu
     }
 
     private void sendRequest(CreateVacationDocumentsRq request) throws JAXBException {
-        String req = marshalToXml(request);
-        jmsTemplate.convertAndSend("YURLOV.IN", req);
+        String requestXml = marshalToXml(request);
+        jmsTemplate.convertAndSend(inQueue, requestXml);
     }
 
     private CreateVacationDocumentsRs receiveResponse() throws JAXBException {
-        String xmlMessage = (String) jmsTemplate.receiveAndConvert("YURLOV.OUT");
-        return unmarshalFromXml(xmlMessage);
+        String responseXml = (String) jmsTemplate.receiveAndConvert(outQueue);
+        return unmarshalFromXml(responseXml);
     }
 }
