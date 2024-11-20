@@ -13,12 +13,28 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.domain.employee;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.NaturalId;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.Role;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.State;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.ManyToMany;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import javax.persistence.JoinColumn;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
