@@ -19,8 +19,14 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class LoadUsersFromJsonUseCase implements LoadUsersFromJsonInbound {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoadUsersFromJsonUseCase.class);
-    private GenerateSecurePasswordInbound generateSecurePasswordInbound;
-    private CreateEmployeeInbound createEmployeeInbound;
+    private static final String FIRST_NAME = "first-name";
+    private static final String SECOND_NAME = "second-name";
+    private static final String LAST_NAME = "last-name";
+    private static final String USERNAME = "username";
+    private static final String EMAIL = "email";
+    private static final String ROLES = "roles";
+    private final GenerateSecurePasswordInbound generateSecurePassword;
+    private final CreateEmployeeInbound createEmployee;
 
     @Transactional
     @Override
@@ -34,8 +40,6 @@ public class LoadUsersFromJsonUseCase implements LoadUsersFromJsonInbound {
                     createUserFromNode(user);
                 }
             }
-        } catch (EmployeeRegistrationException e) {
-            throw e;
         } catch (Exception e) {
             throw new EmployeeRegistrationException("Error processing file" + e.getMessage());
         }
@@ -47,24 +51,24 @@ public class LoadUsersFromJsonUseCase implements LoadUsersFromJsonInbound {
     // ===================================================================================================================
 
     private void checkCredentials(JsonNode user) {
-        if ((!user.hasNonNull("first-name")) ||
-            (!user.hasNonNull("last-name")) ||
-            (!user.hasNonNull("username")) ||
-            (!user.hasNonNull("email")) ||
-            (!user.hasNonNull("roles"))
+        if ((!user.hasNonNull(FIRST_NAME) || user.get(FIRST_NAME).asText().isEmpty()) ||
+            (!user.hasNonNull(LAST_NAME) || user.get(LAST_NAME).asText().isEmpty()) ||
+            (!user.hasNonNull(USERNAME) || user.get(USERNAME).asText().isEmpty()) ||
+            (!user.hasNonNull(EMAIL) || user.get(EMAIL).asText().isEmpty()) ||
+            (!user.hasNonNull(ROLES) || !user.get(ROLES).isArray() || user.get(ROLES).isEmpty())
         ) {
             throw new EmployeeRegistrationException("Some required credentials are null");
         }
     }
 
     private void createUserFromNode(JsonNode user) {
-        String login = user.get("username").asText();
-        String firstName = user.get("first-name").asText();
-        String secondName = (user.get("second-name").asText() != null) ? user.get("second-name").asText() : null;
-        String lastName = user.get("last-name").asText();
-        String email = user.get("email").asText();
+        String login = user.get(USERNAME).asText();
+        String firstName = user.get(FIRST_NAME).asText();
+        String secondName = (user.has(SECOND_NAME)) ? user.get(SECOND_NAME).asText() : null;
+        String lastName = user.get(LAST_NAME).asText();
+        String email = user.get(EMAIL).asText();
 
-        JsonNode roles = user.get("roles");
+        JsonNode roles = user.get(ROLES);
         Set<String> rolesSet = new HashSet<>();
         if (roles.isArray()) {
             for (JsonNode role : roles) {
@@ -72,8 +76,7 @@ public class LoadUsersFromJsonUseCase implements LoadUsersFromJsonInbound {
             }
         }
 
-        String pass = generateSecurePasswordInbound.execute();
-
-        createEmployeeInbound.execute(login, firstName, secondName, lastName, pass, email, rolesSet);
+        String pass = generateSecurePassword.execute();
+        createEmployee.execute(login, firstName, secondName, lastName, pass, email, rolesSet);
     }
 }

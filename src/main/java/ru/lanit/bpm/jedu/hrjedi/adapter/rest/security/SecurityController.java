@@ -14,15 +14,14 @@
 package ru.lanit.bpm.jedu.hrjedi.adapter.rest.security;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.JwtResponse;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.LoginFormDto;
@@ -47,12 +46,9 @@ public class SecurityController {
     }
 
     @PostMapping("/load-users-from-json")
-    public ResponseEntity<String> loadUsersFromJson(@RequestBody MultipartFile json) {
-        final Logger LOGGER = LoggerFactory.getLogger(SecurityController.class);
-        LOGGER.info("ПОПЫТКА");
+    public ResponseEntity<String> loadUsersFromJson(@RequestParam("users") MultipartFile json) {
         try {
             String fileText = new String(json.getBytes(), StandardCharsets.UTF_8);
-            LOGGER.info(fileText);
             loadUsersFromJsonInbound.execute(fileText);
             return ResponseEntity.ok().body("Users added");
         } catch (Exception e) {
