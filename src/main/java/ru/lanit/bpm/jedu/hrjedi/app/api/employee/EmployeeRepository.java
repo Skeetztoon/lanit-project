@@ -1,9 +1,10 @@
 package ru.lanit.bpm.jedu.hrjedi.app.api.employee;
 
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProjection;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface EmployeeRepository {
@@ -17,7 +18,7 @@ public interface EmployeeRepository {
 
     boolean existsByEmail(String email);
 
-    List<Map<String, Object>> getRolesQuantity();
+    List<RoleQuantityProjection> getRolesQuantity();
 
-    List<Map<String, Object>> getUsersWithRoles();
+    List<UserWithRolesProjection> getUsersWithRoles();
 }

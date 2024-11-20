@@ -6,11 +6,12 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.GetUsersWithRolesInbound;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProjection;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.RoleDto;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.UserWithRolesDto;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -19,31 +20,20 @@ public class GetUsersWithRolesUseCase implements GetUsersWithRolesInbound {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Map<String, Object>> execute() {
-        List<Map<String, Object>> rawData = employeeRepository.getUsersWithRoles();
-        return transformData(rawData);
+    public List<UserWithRolesDto> execute() {
+        return transformData(employeeRepository.getUsersWithRoles());
     }
 
-    private List<Map<String, Object>> transformData (List<Map<String, Object>> input) {
-        List<Map<String, Object>> output = new ArrayList<>();
+    // ===================================================================================================================
+    // = Implementation
+    // ===================================================================================================================
 
-        for (Map<String, Object> user : input) {
-            String login = (String) user.get("login");
-            String roles = (String) user.get("roles");
-
-            List<Map<String, String>> rolesList = new ArrayList<>();
-
-            for (String role : roles.split(" ")) {
-                Map<String, String> roleMap = new HashMap<>();
-                roleMap.put("name", role);
-                rolesList.add(roleMap);
-            }
-
-            Map<String, Object> transformedUser = new HashMap<>();
-            transformedUser.put("login", login);
-            transformedUser.put("roles", rolesList);
-            output.add(transformedUser);
-        }
-        return  output;
+    private List<UserWithRolesDto> transformData(List<UserWithRolesProjection> input) {
+        return input.stream().map(user -> new UserWithRolesDto(
+            user.getUserCredentials(),
+            Arrays.stream(user.getRoles().split(" "))
+                .map(role -> new RoleDto(role))
+                .toList()
+        )).toList();
     }
 }

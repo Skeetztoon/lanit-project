@@ -8,18 +8,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetRolesQuantityTest {
-
-    private final static String ROLE = "ROLE";
-    private final static String USERS_QUANTITY = "USERS_QUANTITY";
+    private static final String ROLE_ADMIN = "admin";
+    private static final String ROLE_HR = "hr";
+    private static final String ROLE_USER = "user";
+    private static final long USERS_QUANTITY_ADMIN = 1L;
+    private static final long USERS_QUANTITY_HR = 2L;
+    private static final long USERS_QUANTITY_USER = 10L;
 
     @Mock
     EmployeeRepository employeeRepository;
@@ -29,17 +30,31 @@ public class GetRolesQuantityTest {
 
     @Test
     public void getRolesQuantity_singleRole() {
-        List<Map<String, Object>> roles = new ArrayList<>();
-        roles.add(Map.of(ROLE, "admin", USERS_QUANTITY, BigInteger.valueOf(1)));
-        roles.add(Map.of(ROLE, "hr", USERS_QUANTITY, BigInteger.valueOf(2)));
-        roles.add(Map.of(ROLE, "user", USERS_QUANTITY, BigInteger.valueOf(10)));
-        Map<String, Long> expectedOutput = new HashMap<>();
-        expectedOutput.put("admin",  1L);
-        expectedOutput.put("hr", 2L);
-        expectedOutput.put("user", 10L);
+        List<RoleQuantityProjection> input = List.of(
+            createRoleQuantityProjection(ROLE_ADMIN, USERS_QUANTITY_ADMIN),
+            createRoleQuantityProjection(ROLE_HR, USERS_QUANTITY_HR),
+            createRoleQuantityProjection(ROLE_USER, USERS_QUANTITY_USER)
+        );
+        Mockito.when(employeeRepository.getRolesQuantity()).thenReturn(input);
+        Map<String, Long> expectedOutput = Map.of(
+            ROLE_ADMIN, USERS_QUANTITY_ADMIN,
+            ROLE_HR, USERS_QUANTITY_HR,
+            ROLE_USER, USERS_QUANTITY_USER
+        );
 
-        Mockito.when(employeeRepository.getRolesQuantity()).thenReturn(roles);
+        Map<String, Long> actualOutput = getRolesQuantityUseCase.execute();
 
-        Assert.assertEquals(expectedOutput, getRolesQuantityUseCase.execute());
+        Assert.assertEquals(expectedOutput, actualOutput);
+    }
+
+    // ===================================================================================================================
+    // = Implementation
+    // ===================================================================================================================
+
+    private RoleQuantityProjection createRoleQuantityProjection(String role, long usersQuantity) {
+        RoleQuantityProjection projection = Mockito.mock(RoleQuantityProjection.class);
+        Mockito.when(projection.getRole()).thenReturn(role);
+        Mockito.when(projection.getUsersQuantity()).thenReturn(usersQuantity);
+        return projection;
     }
 }

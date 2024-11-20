@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProjection;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -40,8 +41,12 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public List<Map<String, Object>> getRolesQuantity() { return  employeeJpaRepository.getRolesQuantity(); }
+    public List<RoleQuantityProjection> getRolesQuantity() {
+        return employeeJpaRepository.getRolesQuantity();
+    }
 
     @Override
-    public List<Map<String, Object>> getUsersWithRoles() { return  employeeJpaRepository.getUsersWithRoles(); }
+    public List<UserWithRolesProjection> getUsersWithRoles() {
+        return employeeJpaRepository.getUsersWithRoles();
+    }
 }

@@ -25,6 +25,7 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.EmployeeAvatar;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.UserWithRolesDto;
 
 import javax.servlet.ServletContext;
 import java.util.List;
@@ -115,5 +116,7 @@ public class EmployeeController {
 
     @GetMapping("/employee-with-role")
     @PreAuthorize("hasRole('OMNI') or hasRole('ADMIN') or hasRole('HR')")
-    public List<Map<String, Object>> getUsersWithRoles() { return getUsersWithRolesInbound.execute(); }
+    public List<UserWithRolesDto> getUsersWithRoles() {
+        return getUsersWithRolesInbound.execute();
+    }
 }

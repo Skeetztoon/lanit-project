@@ -2,13 +2,11 @@ package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.GetRolesQuantityInbound;
 
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigInteger;
-import java.util.List;
+import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,13 +18,13 @@ public class GetRolesQuantityUseCase implements GetRolesQuantityInbound {
     @Transactional(readOnly = true)
     @Override
     public Map<String, Long> execute() {
-        List<Map<String, Object>> rawData = employeeRepository.getRolesQuantity();
-
-        return rawData.stream().collect(
-            Collectors.toMap(
-                entry -> (String) entry.get("ROLE"),
-                entry -> ((BigInteger) entry.get("USERS_QUANTITY")).longValue()
-            )
-        );
+        return employeeRepository.getRolesQuantity()
+            .stream()
+            .collect(
+                Collectors.toMap(
+                    RoleQuantityProjection::getRole,
+                    RoleQuantityProjection::getUsersQuantity
+                )
+            );
     }
 }
