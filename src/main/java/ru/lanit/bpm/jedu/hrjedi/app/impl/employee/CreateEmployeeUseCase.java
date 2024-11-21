@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.CreateEmployeeInbound;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRegistrationException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
+import ru.lanit.bpm.jedu.hrjedi.app.api.employee.ValidateEmailInbound;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.RoleRepository;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.Role;
@@ -22,6 +24,7 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ValidateEmailInbound validateEmail;
 
     @Transactional
     @Override
@@ -30,6 +33,7 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
 
         validateRegisteredLogin(trimmedLoginInLowerCase);
         validateRegisteredEmail(email);
+        validateEmailPattern(email);
 
         Employee user = new Employee(trimmedLoginInLowerCase, firstName, patronymic, lastName, passwordEncoder.encode(password), email);
         user.setRoles(validateAndGetRegisteredRoles(rolesStrings));
@@ -50,6 +54,14 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
     private void validateRegisteredEmail(String email) {
         if (employeeRepository.existsByEmail(email)) {
             throw new EmployeeRegistrationException("Employee with this email already exists!");
+        }
+    }
+
+    private void validateEmailPattern(String email) {
+        try {
+            validateEmail.execute(email);
+        } catch (InvalidEmailException e) {
+            throw new EmployeeRegistrationException(e.getMessage());
         }
     }
 
