@@ -17,9 +17,8 @@ public class FindVacationsToApproveUseCase implements FindVacationsToApproveInbo
 
     @Override
     public Set<String> execute(String approverLogin) {
-        return taskService
-            .createTaskQuery().
-            processVariableValueEquals("approverLogin", approverLogin)
+        return taskService.createTaskQuery()
+            .processVariableValueEquals("approverLogin", approverLogin)
             .active()
             .list()
             .stream()
