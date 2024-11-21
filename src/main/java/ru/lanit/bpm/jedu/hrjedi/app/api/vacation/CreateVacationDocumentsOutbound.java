@@ -2,6 +2,8 @@ package ru.lanit.bpm.jedu.hrjedi.app.api.vacation;
 
 import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 
+import javax.xml.bind.JAXBException;
+
 public interface CreateVacationDocumentsOutbound {
-    void execute(Vacation vacation) throws CreateVacationDocumentsException;
+    void execute(Vacation vacation) throws CreateVacationDocumentsException, JAXBException;
 }

@@ -35,27 +35,23 @@ public class CreateVacationDocumentsAdapter implements CreateVacationDocumentsOu
     @Autowired
     public JmsTemplate jmsTemplate;
 
-    public void execute(Vacation vacation) throws CreateVacationDocumentsException {
+    public void execute(Vacation vacation) throws JAXBException, CreateVacationDocumentsException {
         Employee employee = vacation.getEmployee();
         String login = employee.getLogin();
         LOGGER.info("Attempting to send request on {} vacation", login);
 
-        try {
-            CreateVacationDocumentsRq request = new CreateVacationDocumentsRq();
-            request.setLogin(login);
-            request.setStartDate(vacation.getStart().format(DAY_FORMATTER));
-            request.setEndDate(vacation.getEnd().format(DAY_FORMATTER));
-            sendRequest(request);
+        CreateVacationDocumentsRq request = CreateVacationDocumentsRq.builder()
+            .login(login)
+            .startDate(vacation.getStart().format(DAY_FORMATTER))
+            .endDate(vacation.getEnd().format(DAY_FORMATTER))
+            .build();
+        sendRequest(request);
 
-            CreateVacationDocumentsRs response = receiveResponse();
-            if (!response.getStatus().equals("OK")) {
-                throw new CreateVacationDocumentsException("Не найден сотрудник с идентификатором");
-            }
-        } catch (CreateVacationDocumentsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new CreateVacationDocumentsException("Не получен ответ");
+        CreateVacationDocumentsRs response = receiveResponse();
+        if (!response.getStatus().equals("OK")) {
+            throw new CreateVacationDocumentsException(response.getDescription());
         }
+
         LOGGER.info("Request processed successfully for {}", login);
     }
 
@@ -84,8 +80,11 @@ public class CreateVacationDocumentsAdapter implements CreateVacationDocumentsOu
         jmsTemplate.convertAndSend(inQueue, requestXml);
     }
 
-    private CreateVacationDocumentsRs receiveResponse() throws JAXBException {
+    private CreateVacationDocumentsRs receiveResponse() throws CreateVacationDocumentsException, JAXBException {
         String responseXml = (String) jmsTemplate.receiveAndConvert(outQueue);
+        if (responseXml == null) {
+            throw new CreateVacationDocumentsException("Не получен ответ");
+        }
         return unmarshalFromXml(responseXml);
     }
 }

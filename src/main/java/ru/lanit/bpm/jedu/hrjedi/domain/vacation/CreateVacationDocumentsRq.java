@@ -26,4 +26,37 @@ public class CreateVacationDocumentsRq {
     public String getEndDate() {
         return endDate;
     }
+
+    public static class Builder {
+        private String login;
+        private String startDate;
+        private String endDate;
+
+        public Builder login(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder startDate(String startDate) {
+            this.startDate = startDate;
+            return this;
+        }
+
+        public Builder endDate(String endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        public CreateVacationDocumentsRq build() {
+            CreateVacationDocumentsRq request = new CreateVacationDocumentsRq();
+            request.setLogin(this.login);
+            request.setStartDate(this.startDate);
+            request.setEndDate(this.endDate);
+            return request;
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

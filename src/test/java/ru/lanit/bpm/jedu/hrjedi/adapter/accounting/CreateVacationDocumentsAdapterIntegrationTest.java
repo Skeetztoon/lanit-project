@@ -1,7 +1,6 @@
 package ru.lanit.bpm.jedu.hrjedi.adapter.accounting;
 
 import com.ibm.mq.spring.boot.MQAutoConfiguration;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,8 +16,8 @@ import ru.lanit.bpm.jedu.hrjedi.domain.vacation.Vacation;
 import java.time.LocalDate;
 
 import static org.hamcrest.Matchers.containsStringIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     classes = {MQAutoConfiguration.class, JmsAutoConfiguration.class, CreateVacationDocumentsAdapter.class},
@@ -40,17 +39,17 @@ public class CreateVacationDocumentsAdapterIntegrationTest {
     private CreateVacationDocumentsAdapter createVacationDocumentsAdapter;
 
     @Test
-    public void success() throws Exception {
+    public void success() {
         Vacation vacation = new Vacation(EMPLOYEE_IVANOV, DATE_START, DATE_END);
 
-        createVacationDocumentsAdapter.execute(vacation);
+        assertDoesNotThrow(() -> createVacationDocumentsAdapter.execute(vacation));
     }
 
     @Test
     public void employeeNotFound() throws Exception {
         Vacation vacation = new Vacation(EMPLOYEE_PETROV, DATE_START, DATE_END);
         expectedException.expect(CreateVacationDocumentsException.class);
-        expectedException.expectMessage(containsStringIgnoringCase("Не найден сотрудник с идентификатором"));
+        expectedException.expectMessage(containsStringIgnoringCase("Не найден сотрудник с идентификатором 'petrov'"));
 
         createVacationDocumentsAdapter.execute(vacation);
     }
