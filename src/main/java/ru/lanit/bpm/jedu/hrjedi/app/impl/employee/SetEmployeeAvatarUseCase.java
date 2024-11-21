@@ -1,6 +1,5 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
-@RequiredArgsConstructor
 public class SetEmployeeAvatarUseCase implements SetEmployeeAvatarInbound {
     private static final Logger LOGGER = LoggerFactory.getLogger(SetEmployeeAvatarUseCase.class);
 
