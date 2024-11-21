@@ -39,7 +39,7 @@ ru:
         hrjedi:
           headOfHrLogin: hr
           queues:
-            2t-cv-request: 2t-create-vacation-documents-request
+            2t-cv-request: 2t-create-vacation-documents-response
             2t-cv-response: 2t-create-vacation-documents-response
           jwtExpiration: 3600
           email:
