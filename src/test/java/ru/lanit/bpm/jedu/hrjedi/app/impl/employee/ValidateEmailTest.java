@@ -7,6 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @RunWith(SpringRunner.class)
 public class ValidateEmailTest {
@@ -17,14 +18,14 @@ public class ValidateEmailTest {
     public void validLatinWithDash() {
         String email = "asd-123@gmad.ti";
 
-        validateEmailUseCase.execute(email);
+        assertDoesNotThrow(() -> validateEmailUseCase.execute(email));
     }
 
     @Test
     public void validCyrilicWithDot() {
         String email = "привет.мир@почта.ру";
 
-        validateEmailUseCase.execute(email);
+        assertDoesNotThrow(() -> validateEmailUseCase.execute(email));
     }
 
     @Test

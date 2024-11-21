@@ -63,7 +63,7 @@ public class EmployeeController {
                 signUpRequest.getPassword(),
                 signUpRequest.getEmail(),
                 signUpRequest.getRoles());
-        } catch (EmployeeRegistrationException ex) {
+        } catch (EmployeeRegistrationException | InvalidEmailException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
 

@@ -33,7 +33,7 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
 
         validateRegisteredLogin(trimmedLoginInLowerCase);
         validateRegisteredEmail(email);
-        validateEmailPattern(email);
+        validateEmail.execute(email);
 
         Employee user = new Employee(trimmedLoginInLowerCase, firstName, patronymic, lastName, passwordEncoder.encode(password), email);
         user.setRoles(validateAndGetRegisteredRoles(rolesStrings));
@@ -54,14 +54,6 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
     private void validateRegisteredEmail(String email) {
         if (employeeRepository.existsByEmail(email)) {
             throw new EmployeeRegistrationException("Employee with this email already exists!");
-        }
-    }
-
-    private void validateEmailPattern(String email) {
-        try {
-            validateEmail.execute(email);
-        } catch (InvalidEmailException e) {
-            throw new EmployeeRegistrationException(e.getMessage());
         }
     }
 
