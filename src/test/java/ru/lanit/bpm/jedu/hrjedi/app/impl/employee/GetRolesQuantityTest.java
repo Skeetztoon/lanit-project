@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
+import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection.RoleQuantityProjection;
 
 import java.util.List;
 import java.util.Map;

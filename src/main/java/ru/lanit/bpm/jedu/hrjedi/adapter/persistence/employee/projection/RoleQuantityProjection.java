@@ -1,4 +1,4 @@
-package ru.lanit.bpm.jedu.hrjedi.domain.employee.projections;
+package ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection;
 
 public interface RoleQuantityProjection {
     String getRole();

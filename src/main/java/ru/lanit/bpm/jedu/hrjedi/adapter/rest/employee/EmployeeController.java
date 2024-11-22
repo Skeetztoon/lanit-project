@@ -25,7 +25,7 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.employee.*;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.GenerateSecurePasswordInbound;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.EmployeeAvatar;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.UserWithRolesDto;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.UserWithRolesDto;
 
 import javax.servlet.ServletContext;
 import java.util.List;

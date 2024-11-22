@@ -16,8 +16,8 @@ package ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.Employee;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.RoleQuantityProjection;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProjection;
+import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection.RoleQuantityProjection;
+import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection.UserWithRolesProjection;
 
 import java.util.List;
 import java.util.Optional;

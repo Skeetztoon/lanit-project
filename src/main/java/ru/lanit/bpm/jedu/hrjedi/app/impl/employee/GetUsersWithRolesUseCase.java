@@ -6,9 +6,9 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.GetUsersWithRolesInbound;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProjection;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.RoleDto;
-import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.UserWithRolesDto;
+import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection.UserWithRolesProjection;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.RoleDto;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.employee.dto.UserWithRolesDto;
 
 import java.util.Arrays;
 import java.util.List;
