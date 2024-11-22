@@ -31,8 +31,8 @@ public class GetUsersWithRolesUseCase implements GetUsersWithRolesInbound {
     private List<UserWithRolesDto> transformData(List<UserWithRolesProjection> input) {
         return input.stream().map(user -> new UserWithRolesDto(
             user.getUserCredentials(),
-            Arrays.stream(user.getRoles().split(" "))
-                .map(role -> new RoleDto(role))
+            Arrays.stream(user.getRoles().toArray())
+                .map(role -> new RoleDto(role.toString()))
                 .toList()
         )).toList();
     }

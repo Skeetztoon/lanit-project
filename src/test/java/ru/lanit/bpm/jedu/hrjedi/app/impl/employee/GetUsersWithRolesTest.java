@@ -1,6 +1,5 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,7 +11,11 @@ import ru.lanit.bpm.jedu.hrjedi.domain.employee.projections.UserWithRolesProject
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.RoleDto;
 import ru.lanit.bpm.jedu.hrjedi.domain.employee.dto.UserWithRolesDto;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetUsersWithRolesTest {
@@ -33,9 +36,9 @@ public class GetUsersWithRolesTest {
     @Test
     public void getRolesQuantity_singleRole() {
         List<UserWithRolesProjection> input = List.of(
-            createUsersWithRolesProjection(USER_1, ADMIN),
-            createUsersWithRolesProjection(USER_2, HR),
-            createUsersWithRolesProjection(USER_3, USER)
+            createUsersWithRolesProjection(USER_1, Set.of(ADMIN)),
+            createUsersWithRolesProjection(USER_2, Set.of(HR)),
+            createUsersWithRolesProjection(USER_3, Set.of(USER))
         );
         List<UserWithRolesDto> expectedOutput = List.of(
             createUserWithRolesDto(USER_1, createRoleDto(ADMIN)),
@@ -44,15 +47,15 @@ public class GetUsersWithRolesTest {
         );
         Mockito.when(employeeRepository.getUsersWithRoles()).thenReturn(input);
 
-        Assert.assertEquals(expectedOutput, getUsersWithRolesUseCase.execute());
+        assertEquals(expectedOutput, getUsersWithRolesUseCase.execute());
     }
 
     @Test
     public void getRolesQuantity_multipleRoles() {
         List<UserWithRolesProjection> input = List.of(
-            createUsersWithRolesProjection(USER_1, ADMIN + " " + HR),
-            createUsersWithRolesProjection(USER_2, HR),
-            createUsersWithRolesProjection(USER_3, USER + " " + OMNI)
+            createUsersWithRolesProjection(USER_1, Set.of(ADMIN, HR)),
+            createUsersWithRolesProjection(USER_2, Set.of(HR)),
+            createUsersWithRolesProjection(USER_3, Set.of(USER, OMNI))
         );
         List<UserWithRolesDto> expectedOutput = List.of(
             createUserWithRolesDto(USER_1, createRoleDto(ADMIN), createRoleDto(HR)),
@@ -63,14 +66,23 @@ public class GetUsersWithRolesTest {
 
         List<UserWithRolesDto> actualOutput = getUsersWithRolesUseCase.execute();
 
-        Assert.assertEquals(expectedOutput, actualOutput);
+        assertEquals(expectedOutput.size(), actualOutput.size());
+        for (int i = 0; i < expectedOutput.size(); i++) {
+            UserWithRolesDto expected = expectedOutput.get(i);
+            UserWithRolesDto actual = actualOutput.get(i);
+            assertEquals(expected.getLogin(), actual.getLogin());
+            assertEquals(
+                new HashSet<>(expected.getRoles()),
+                new HashSet<>(actual.getRoles())
+            );
+        }
     }
 
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
 
-    private UserWithRolesProjection createUsersWithRolesProjection(String userCredentials, String roles) {
+    private UserWithRolesProjection createUsersWithRolesProjection(String userCredentials, Set<String> roles) {
         UserWithRolesProjection projection = Mockito.mock(UserWithRolesProjection.class);
         Mockito.when(projection.getUserCredentials()).thenReturn(userCredentials);
         Mockito.when(projection.getRoles()).thenReturn(roles);

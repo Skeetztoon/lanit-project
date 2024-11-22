@@ -35,14 +35,9 @@ public interface EmployeeJpaRepository extends JpaRepository<Employee, Long> {
         "GROUP BY r.name")
     List<RoleQuantityProjection> getRolesQuantity();
 
-    @Query(value = "SELECT concat(e.last_name, ' ', e.first_name, ' ', e.patronymic) as userCredentials, " +
-        "string_agg(r.name, ' ') AS roles " +
-        "FROM Employee e " +
-        "JOIN Employee_role er " +
-        "ON e.id = er.employee_id " +
-        "JOIN Role r " +
-        "ON er.role_id = r.id " +
-        "GROUP BY userCredentials", nativeQuery = true)
+    @Query("SELECT CONCAT(e.last_name, ' ', e.first_name, ' ', e.patronymic) as userCredentials, " +
+        "e.roles AS roles " +
+        "FROM Employee e ")
     List<UserWithRolesProjection> getUsersWithRoles();
 }
 

@@ -1,7 +1,9 @@
 package ru.lanit.bpm.jedu.hrjedi.domain.employee.projections;
 
+import java.util.Set;
+
 public interface UserWithRolesProjection {
     String getUserCredentials();
 
-    String getRoles();
+    Set<String> getRoles();
 }
