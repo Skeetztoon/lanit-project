@@ -31,7 +31,7 @@
     </bpmn2:exclusiveGateway>
     <bpmn2:sequenceFlow id="SequenceFlow_0q3b7s5" sourceRef="approve-request" targetRef="ExclusiveGateway_1bc3ojx" />
     <bpmn2:sequenceFlow id="SequenceFlow_130j72h" name="Да" sourceRef="ExclusiveGateway_1bc3ojx" targetRef="IntermediateThrowEvent_1mdyabp">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=lastAction = "approve"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${lastAction == 'approve'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:intermediateThrowEvent id="IntermediateThrowEvent_0ybspe9" name="На согласовании">
       <bpmn2:extensionElements>
@@ -93,10 +93,10 @@
       <bpmn2:outgoing>SequenceFlow_1cczbe4</bpmn2:outgoing>
     </bpmn2:exclusiveGateway>
     <bpmn2:sequenceFlow id="SequenceFlow_1x5270c" name="Да" sourceRef="ExclusiveGateway_0knu8lu" targetRef="IntermediateThrowEvent_0ybspe9">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=lastAction = "submit"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${lastAction == 'submit'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="SequenceFlow_1cczbe4" name="Нет" sourceRef="ExclusiveGateway_0knu8lu" targetRef="IntermediateThrowEvent_1hsq1js">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=lastAction = "cancel"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${lastAction == 'cancel'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:exclusiveGateway id="ExclusiveGateway_10q0w50">
       <bpmn2:incoming>SequenceFlow_1nkz5oy</bpmn2:incoming>
@@ -108,9 +108,9 @@
       <bpmn2:incoming>Flow_1u8126l</bpmn2:incoming>
     </bpmn2:endEvent>
     <bpmn2:sequenceFlow id="SequenceFlow_07httwo" name="Нет" sourceRef="ExclusiveGateway_1bc3ojx" targetRef="IntermediateThrowEvent_1wmarn8">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=lastAction = "reject"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${lastAction == 'reject'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
-    <bpmn2:serviceTask id="send-to-2t" name="Отправка информации в бухгалтерию" camunda:delegateExpression="${createVacationDocumentsDelegate}">
+    <bpmn2:serviceTask id="send-to-2t" name="Отправка информации в бухгалтерию" camunda:formKey="vacation-approval:send-to-2t" camunda:delegateExpression="${createVacationDocumentsDelegate}">
       <bpmn2:extensionElements />
       <bpmn2:incoming>Flow_0x9oxay</bpmn2:incoming>
       <bpmn2:outgoing>Flow_0qdl0d0</bpmn2:outgoing>
@@ -123,10 +123,10 @@
     </bpmn2:exclusiveGateway>
     <bpmn2:sequenceFlow id="Flow_0qdl0d0" sourceRef="send-to-2t" targetRef="ExclusiveGateway_1wgrog9" />
     <bpmn2:sequenceFlow id="Flow_1u8126l" name="Да" sourceRef="ExclusiveGateway_1wgrog9" targetRef="EndEvent_06w5zq4">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=sendingStatus = "accept"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${sendingStatus == 'accept'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:sequenceFlow id="Flow_194c8qv" name="Нет" sourceRef="ExclusiveGateway_1wgrog9" targetRef="IntermediateThrowEvent_1wmarn8">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">=sendingStatus = "decline"</bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression">${sendingStatus == 'decline'}</bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
   </bpmn2:process>
   <bpmn2:message id="Message_0zh4aor" name="Revoke" />
