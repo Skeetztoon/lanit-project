@@ -1,51 +1,29 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@RunWith(SpringRunner.class)
-public class ValidateEmailTest {
+@ExtendWith(MockitoExtension.class)
+class ValidateEmailTest {
     @InjectMocks
     private ValidateEmailUseCase validateEmailUseCase;
 
-    @Test
-    public void validLatinWithDash() {
-        String email = "asd-123@gmad.ti";
-
+    @ParameterizedTest
+    @ValueSource(strings = {"asd-123@gmad.ti", "привет.мир@почта.ру"})
+    void validEmailTest(String email) {
         assertDoesNotThrow(() -> validateEmailUseCase.execute(email));
     }
 
-    @Test
-    public void validCyrilicWithDot() {
-        String email = "привет.мир@почта.ру";
-
-        assertDoesNotThrow(() -> validateEmailUseCase.execute(email));
-    }
-
-    @Test
-    public void invalidNoPrefix() {
-        String email = "@mail.ti";
-
-        assertThrows(InvalidEmailException.class, () -> validateEmailUseCase.execute(email));
-    }
-
-    @Test
-    public void invalidNoPostfix() {
-        String email = "asd@";
-
-        assertThrows(InvalidEmailException.class, () -> validateEmailUseCase.execute(email));
-    }
-
-    @Test
-    public void invalidDoubleAt() {
-        String email = "asd@@mail.com";
-
+    @ParameterizedTest
+    @ValueSource(strings = {"@mail.ti", "asd@", "asd@@mail.com"})
+    void invalidEmailTest(String email) {
         assertThrows(InvalidEmailException.class, () -> validateEmailUseCase.execute(email));
     }
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.lanit.bpm.jedu.hrjedi.app.api.employee.InvalidEmailException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.CreateEmployeeInbound;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRegistrationException;
 import ru.lanit.bpm.jedu.hrjedi.app.api.employee.EmployeeRepository;
@@ -31,9 +30,9 @@ public class CreateEmployeeUseCase implements CreateEmployeeInbound {
     public void execute(String login, String firstName, String patronymic, String lastName, String password, String email, Set<String> rolesStrings) {
         String trimmedLoginInLowerCase = login.trim().toLowerCase();
 
+        validateEmail.execute(email);
         validateRegisteredLogin(trimmedLoginInLowerCase);
         validateRegisteredEmail(email);
-        validateEmail.execute(email);
 
         Employee user = new Employee(trimmedLoginInLowerCase, firstName, patronymic, lastName, passwordEncoder.encode(password), email);
         user.setRoles(validateAndGetRegisteredRoles(rolesStrings));
