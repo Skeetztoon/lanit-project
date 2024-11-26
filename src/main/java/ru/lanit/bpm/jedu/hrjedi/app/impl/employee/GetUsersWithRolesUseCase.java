@@ -21,15 +21,15 @@ public class GetUsersWithRolesUseCase implements GetUsersWithRolesInbound {
     @Transactional(readOnly = true)
     @Override
     public List<UserWithRolesDto> execute() {
-        return transformData(employeeRepository.getUsersWithRoles());
+        return mapToDto(employeeRepository.getUsersWithRoles());
     }
 
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
 
-    private List<UserWithRolesDto> transformData(List<UserWithRolesProjection> input) {
-        return input.stream().map(user -> new UserWithRolesDto(
+    private List<UserWithRolesDto> mapToDto(List<UserWithRolesProjection> projectionsList) {
+        return projectionsList.stream().map(user -> new UserWithRolesDto(
             user.getUserCredentials(),
             Arrays.stream(user.getRoles().toArray())
                 .map(role -> new RoleDto(role.toString()))

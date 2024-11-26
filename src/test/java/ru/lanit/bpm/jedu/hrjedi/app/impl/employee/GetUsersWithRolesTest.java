@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GetUsersWithRolesTest {
@@ -28,10 +29,10 @@ public class GetUsersWithRolesTest {
     private final static String OMNI = "Omni";
 
     @Mock
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @InjectMocks
-    GetUsersWithRolesUseCase getUsersWithRolesUseCase;
+    private GetUsersWithRolesUseCase getUsersWithRolesUseCase;
 
     @Test
     public void getRolesQuantity_singleRole() {
@@ -45,7 +46,7 @@ public class GetUsersWithRolesTest {
             createUserWithRolesDto(USER_2, createRoleDto(HR)),
             createUserWithRolesDto(USER_3, createRoleDto(USER))
         );
-        Mockito.when(employeeRepository.getUsersWithRoles()).thenReturn(input);
+        when(employeeRepository.getUsersWithRoles()).thenReturn(input);
 
         assertEquals(expectedOutput, getUsersWithRolesUseCase.execute());
     }
@@ -62,7 +63,7 @@ public class GetUsersWithRolesTest {
             createUserWithRolesDto(USER_2, createRoleDto(HR)),
             createUserWithRolesDto(USER_3, createRoleDto(USER), createRoleDto(OMNI))
         );
-        Mockito.when(employeeRepository.getUsersWithRoles()).thenReturn(input);
+        when(employeeRepository.getUsersWithRoles()).thenReturn(input);
 
         List<UserWithRolesDto> actualOutput = getUsersWithRolesUseCase.execute();
 
@@ -84,8 +85,8 @@ public class GetUsersWithRolesTest {
 
     private UserWithRolesProjection createUsersWithRolesProjection(String userCredentials, Set<String> roles) {
         UserWithRolesProjection projection = Mockito.mock(UserWithRolesProjection.class);
-        Mockito.when(projection.getUserCredentials()).thenReturn(userCredentials);
-        Mockito.when(projection.getRoles()).thenReturn(roles);
+        when(projection.getUserCredentials()).thenReturn(userCredentials);
+        when(projection.getRoles()).thenReturn(roles);
         return projection;
     }
 

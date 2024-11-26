@@ -1,6 +1,5 @@
 package ru.lanit.bpm.jedu.hrjedi.app.impl.employee;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,6 +12,9 @@ import ru.lanit.bpm.jedu.hrjedi.adapter.persistence.employee.projection.RoleQuan
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class GetRolesQuantityTest {
     private static final String ROLE_ADMIN = "admin";
@@ -23,10 +25,10 @@ public class GetRolesQuantityTest {
     private static final long USERS_QUANTITY_USER = 10L;
 
     @Mock
-    EmployeeRepository employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @InjectMocks
-    GetRolesQuantityUseCase getRolesQuantityUseCase;
+    private GetRolesQuantityUseCase getRolesQuantityUseCase;
 
     @Test
     public void getRolesQuantity_singleRole() {
@@ -35,7 +37,7 @@ public class GetRolesQuantityTest {
             createRoleQuantityProjection(ROLE_HR, USERS_QUANTITY_HR),
             createRoleQuantityProjection(ROLE_USER, USERS_QUANTITY_USER)
         );
-        Mockito.when(employeeRepository.getRolesQuantity()).thenReturn(input);
+        when(employeeRepository.getRolesQuantity()).thenReturn(input);
         Map<String, Long> expectedOutput = Map.of(
             ROLE_ADMIN, USERS_QUANTITY_ADMIN,
             ROLE_HR, USERS_QUANTITY_HR,
@@ -44,7 +46,7 @@ public class GetRolesQuantityTest {
 
         Map<String, Long> actualOutput = getRolesQuantityUseCase.execute();
 
-        Assert.assertEquals(expectedOutput, actualOutput);
+        assertEquals(expectedOutput, actualOutput);
     }
 
     // ===================================================================================================================
@@ -53,8 +55,8 @@ public class GetRolesQuantityTest {
 
     private RoleQuantityProjection createRoleQuantityProjection(String role, long usersQuantity) {
         RoleQuantityProjection projection = Mockito.mock(RoleQuantityProjection.class);
-        Mockito.when(projection.getRole()).thenReturn(role);
-        Mockito.when(projection.getUsersQuantity()).thenReturn(usersQuantity);
+        when(projection.getRole()).thenReturn(role);
+        when(projection.getUsersQuantity()).thenReturn(usersQuantity);
         return projection;
     }
 }
