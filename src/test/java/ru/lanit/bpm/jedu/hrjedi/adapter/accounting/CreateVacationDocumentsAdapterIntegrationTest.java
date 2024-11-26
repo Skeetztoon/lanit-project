@@ -20,9 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-    classes = {MQAutoConfiguration.class, JmsAutoConfiguration.class, CreateVacationDocumentsAdapter.class},
-    properties = {"ru.lanit.bpm.jedu.hrjedi.queues.2t-cv-request=YURLOV.IN",
-        "ru.lanit.bpm.jedu.hrjedi.queues.2t-cv-response=YURLOV.OUT"}
+    classes = {MQAutoConfiguration.class, JmsAutoConfiguration.class, CreateVacationDocumentsAdapter.class}
 )
 public class CreateVacationDocumentsAdapterIntegrationTest {
     private static final Employee EMPLOYEE_IVANOV = new Employee("ivanov", "", "", "", "", "");
