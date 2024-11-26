@@ -6,6 +6,7 @@ import ru.lanit.bpm.jedu.hrjedi.app.api.security.RoleRepository;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.Role;
 import ru.lanit.bpm.jedu.hrjedi.domain.security.RoleName;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,5 +17,10 @@ public class RoleRepositoryAdapter implements RoleRepository {
     @Override
     public Optional<Role> findByName(RoleName name) {
         return roleJpaRepository.findByName(name);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleJpaRepository.findAll();
     }
 }

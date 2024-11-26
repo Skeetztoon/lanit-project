@@ -13,6 +13,8 @@
  */
 package ru.lanit.bpm.jedu.hrjedi.adapter.rest.security;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
@@ -25,10 +27,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.JwtResponse;
 import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.LoginFormDto;
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.UsersJsonWrapper;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.LoadUsersFromJsonInbound;
 import ru.lanit.bpm.jedu.hrjedi.app.api.security.LoginInbound;
 
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,11 +51,19 @@ public class SecurityController {
     @PostMapping("/load-users-from-json")
     public ResponseEntity<String> loadUsersFromJson(@RequestParam("users") MultipartFile json) {
         try {
-            String fileText = new String(json.getBytes(), StandardCharsets.UTF_8);
-            loadUsersFromJsonInbound.execute(fileText);
-            return ResponseEntity.ok().body("Users added");
+            ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            UsersJsonWrapper users = mapper.readValue(json.getInputStream(), UsersJsonWrapper.class);
+
+            boolean isSuccess = loadUsersFromJsonInbound.execute(users);
+            if (isSuccess) {
+                return ResponseEntity.ok().body("Users added");
+            } else {
+                return ResponseEntity.badRequest().body("Error during loading users");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Error handling file" + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.internalServerError().body("Unexpected server error");
         }
     }
 }

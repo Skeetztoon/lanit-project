@@ -1,5 +1,7 @@
 package ru.lanit.bpm.jedu.hrjedi.app.api.security;
 
+import ru.lanit.bpm.jedu.hrjedi.adapter.rest.security.dto.UsersJsonWrapper;
+
 public interface LoadUsersFromJsonInbound {
-    void execute(String json);
+    boolean execute(UsersJsonWrapper usersWrapper);
 }
