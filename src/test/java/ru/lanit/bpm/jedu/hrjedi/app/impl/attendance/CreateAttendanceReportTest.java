@@ -38,8 +38,8 @@ public class CreateAttendanceReportTest {
     @Test
     public void sortByOffice() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendance("ivan", "ivanov", "Севастополь"),
-            mockAttendance("petr", "petrov", "Москва")
+            mockAttendance("ivan", "ivanov", null, "Севастополь"),
+            mockAttendance("petr", "petrov", null, "Москва")
         ));
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
@@ -54,8 +54,8 @@ public class CreateAttendanceReportTest {
     @Test
     public void sortByLastName() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendance("petr", "petrov", "Москва"),
-            mockAttendance("ivan", "ivanov", "Москва")
+            mockAttendance("petr", "petrov", null, "Москва"),
+            mockAttendance("ivan", "ivanov", null, "Москва")
         ));
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
@@ -70,8 +70,8 @@ public class CreateAttendanceReportTest {
     @Test
     public void sortByFirstName() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendance("petr", "petrov", "Москва"),
-            mockAttendance("ivan", "petrov", "Москва")
+            mockAttendance("petr", "petrov", null, "Москва"),
+            mockAttendance("ivan", "petrov", null, "Москва")
         ));
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
@@ -86,7 +86,7 @@ public class CreateAttendanceReportTest {
     @Test
     public void calculateDurationInHours() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendance("petr", "petrov", "Москва")
+            mockAttendance("petr", "petrov", null, "Москва")
         ));
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
@@ -102,7 +102,7 @@ public class CreateAttendanceReportTest {
     @Test
     public void credentialsConcatenation() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendanceWithPatronymic("petr", "petrov", "test", "Москва")
+            mockAttendance("petr", "petrov", "test", "Москва")
         ));
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
@@ -118,7 +118,7 @@ public class CreateAttendanceReportTest {
     @Test
     public void credentialsWithoutPatronymicConcatenation() {
         List<Attendance> attendanceList = new ArrayList<>(List.of(
-            mockAttendanceWithPatronymic("petr", "petrov", null, "Москва")
+            mockAttendance("petr", "petrov", null, "Москва")
         ));
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
@@ -135,24 +135,7 @@ public class CreateAttendanceReportTest {
     // = Implementation
     // ===================================================================================================================
 
-    private Attendance mockAttendance(String firstName, String lastName, String officeName) {
-        Attendance attendance = Mockito.mock(Attendance.class);
-        Employee employee = Mockito.mock(Employee.class);
-        Office office = Mockito.mock(Office.class);
-
-        when(office.getName()).thenReturn(officeName);
-        when(employee.getFirstName()).thenReturn(firstName);
-        when(employee.getLastName()).thenReturn(lastName);
-
-        when(attendance.getEmployee()).thenReturn(employee);
-        when(attendance.getOffice()).thenReturn(office);
-        when(attendance.getEntranceTime()).thenReturn(entranceTime);
-        when(attendance.getExitTime()).thenReturn(exitTime);
-
-        return attendance;
-    }
-
-    private Attendance mockAttendanceWithPatronymic(String firstName, String lastName, String patronymic, String officeName) {
+    private Attendance mockAttendance(String firstName, String lastName, String patronymic, String officeName) {
         Attendance attendance = Mockito.mock(Attendance.class);
         Employee employee = Mockito.mock(Employee.class);
         Office office = Mockito.mock(Office.class);

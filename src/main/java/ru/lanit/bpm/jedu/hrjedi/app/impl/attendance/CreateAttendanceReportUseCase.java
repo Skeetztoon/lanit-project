@@ -45,6 +45,7 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
             attendanceList.sort(Comparator.comparing((Attendance a) -> officeOrder.indexOf(a.getOffice().getName()))
                 .thenComparing(a -> a.getEmployee().getLastName())
                 .thenComparing(a -> a.getEmployee().getFirstName())
+                .thenComparing(a -> a.getEmployee().getPatronymic(), Comparator.nullsLast(Comparator.naturalOrder()))
             );
 
             XSSFWorkbook workbook = new XSSFWorkbook(attendanceTemplate);
@@ -65,7 +66,8 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
             Map<String, String> officeOfEmployee = new HashMap<>();
             Map<Long, String> officesInfo = new HashMap<>();
 
-            for (int i = 0; i < attendanceList.size(); i++) {
+            final int numberOfAttendances = attendanceList.size();
+            for (int i = 0; i < numberOfAttendances; i++) {
 
                 Attendance attendance = attendanceList.get(i);
 
@@ -136,9 +138,25 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
 
     private String getCredentials(Attendance attendance) {
         Employee employee = attendance.getEmployee();
-        return (employee.getLastName() != null ? employee.getLastName() : "") + " " +
-            (employee.getLastName() != null ? employee.getFirstName() : "") +
-            (employee.getPatronymic() != null ? " " + employee.getPatronymic() : "");
+        StringBuilder credentials = new StringBuilder();
+
+        if (employee.getLastName() != null) {
+            credentials.append(employee.getLastName());
+        }
+        if (employee.getFirstName() != null) {
+            if (!credentials.isEmpty()) {
+                credentials.append(" ");
+            }
+            credentials.append(employee.getFirstName());
+        }
+        if (employee.getPatronymic() != null) {
+            if (!credentials.isEmpty()) {
+                credentials.append(" ");
+            }
+            credentials.append(employee.getPatronymic());
+        }
+
+        return credentials.toString();
     }
 
     private void setRowData(Attendance attendance, Cell credentials, Cell entrance, Cell exit, Cell officeId) {
