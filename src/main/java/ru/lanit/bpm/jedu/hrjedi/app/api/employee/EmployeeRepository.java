@@ -17,9 +17,7 @@ public interface EmployeeRepository {
 
     boolean existsByLogin(String login);
 
-    boolean existsByLogins(Set<String> logins);
-
     boolean existsByEmail(String email);
 
-    boolean existsByEmails(Set<String> emails);
+    boolean existsByLoginsOrEmails(Set<String> logins, Set<String> emails);
 }

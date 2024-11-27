@@ -21,35 +21,39 @@ import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
 
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateMultipleEmployeesTest {
-    private final static Role ADMIN = new Role();
-    private final static Role USER = new Role();
-    private final static Role HR = new Role();
-
     private final static String MATVEEV = "matveev";
     private final static String DANILIN = "danilin";
-
-    private static final String GENERATED_PASSWORD = "pass";
-    private static final String ENCODED_PASSWORD = "encodedPass";
 
     private final static UserJsonDTO USER_MATVEEV = UserJsonDTO.builder()
         .email(MATVEEV)
         .username(MATVEEV)
+        .firstName(MATVEEV)
+        .lastName(MATVEEV)
         .roles(List.of("HR"))
         .build();
     private final static UserJsonDTO USER_DANILIN = UserJsonDTO.builder()
         .email(DANILIN)
         .username(DANILIN)
+        .firstName(DANILIN)
+        .lastName(DANILIN)
         .roles(List.of("USER"))
         .build();
 
     private static final List<UserJsonDTO> USERS_LIST = List.of(USER_MATVEEV, USER_DANILIN);
-    private static final Set<String> EMAILS_LOGINS = Set.of(MATVEEV, DANILIN);
+    private static final Set<String> LOGINS_EMAILS = Set.of(MATVEEV, DANILIN);
+
+    private final static Role ADMIN = new Role();
+    private final static Role USER = new Role();
+    private final static Role HR = new Role();
+
+    private static final String GENERATED_PASSWORD = "pass";
+    private static final String ENCODED_PASSWORD = "encodedPass";
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -67,31 +71,39 @@ public class CreateMultipleEmployeesTest {
     private CreateMultipleEmployeesUseCase createMultipleEmployeesUseCase;
 
     @Test
-    public void invalidByEmail() {
-        when(employeeRepository.existsByEmails(EMAILS_LOGINS)).thenReturn(true);
+    public void invalidMissingRequiredFields() {
+        UserJsonDTO user = UserJsonDTO.builder().lastName("test").build();
+
+        assertThrows(
+            EmployeeRegistrationException.class,
+            () -> createMultipleEmployeesUseCase.execute(List.of(user))
+        );
+    }
+
+    @Test
+    public void invalidDuplicateLogins() {
+        List<UserJsonDTO> users = List.of(USER_MATVEEV, USER_MATVEEV);
+
+        assertThrows(
+            EmployeeRegistrationException.class,
+            () -> createMultipleEmployeesUseCase.execute(users)
+        );
+    }
+
+    @Test
+    public void invalidLoginsOrEmails() {
+        when(employeeRepository.existsByLoginsOrEmails(LOGINS_EMAILS, LOGINS_EMAILS)).thenReturn(true);
 
         assertThrows(
             EmployeeRegistrationException.class,
             () -> createMultipleEmployeesUseCase.execute(USERS_LIST)
         );
 
-        verify(employeeRepository, times(1)).existsByEmails(EMAILS_LOGINS);
+        verify(employeeRepository, times(1)).existsByLoginsOrEmails(LOGINS_EMAILS, LOGINS_EMAILS);
     }
 
     @Test
-    public void invalidByLogin() {
-        when(employeeRepository.existsByLogins(EMAILS_LOGINS)).thenReturn(true);
-
-        assertThrows(
-            EmployeeRegistrationException.class,
-            () -> createMultipleEmployeesUseCase.execute(USERS_LIST)
-        );
-
-        verify(employeeRepository, times(1)).existsByLogins(EMAILS_LOGINS);
-    }
-
-    @Test
-    public void invalidByRoles() {
+    public void invalidRoles() {
         ADMIN.setName(RoleName.ROLE_ADMIN);
         USER.setName(RoleName.ROLE_USER);
 
@@ -106,13 +118,14 @@ public class CreateMultipleEmployeesTest {
     @Test
     public void success() {
         HR.setName(RoleName.ROLE_HR);
+        ADMIN.setName(RoleName.ROLE_ADMIN);
+        USER.setName(RoleName.ROLE_USER);
 
-        when(employeeRepository.existsByLogins(Set.of(MATVEEV))).thenReturn(false);
-        when(employeeRepository.existsByLogins(Set.of(MATVEEV))).thenReturn(false);
-        when(roleRepository.findAll()).thenReturn(List.of(HR));
+        when(employeeRepository.existsByLoginsOrEmails(LOGINS_EMAILS, LOGINS_EMAILS)).thenReturn(false);
+        when(roleRepository.findAll()).thenReturn(List.of(HR, ADMIN, USER));
         when(generateSecurePassword.execute()).thenReturn(GENERATED_PASSWORD);
         when(passwordEncoder.encode(GENERATED_PASSWORD)).thenReturn(ENCODED_PASSWORD);
 
-        Assertions.assertDoesNotThrow(() -> createMultipleEmployeesUseCase.execute(List.of(USER_MATVEEV)));
+        Assertions.assertDoesNotThrow(() -> createMultipleEmployeesUseCase.execute(USERS_LIST));
     }
 }

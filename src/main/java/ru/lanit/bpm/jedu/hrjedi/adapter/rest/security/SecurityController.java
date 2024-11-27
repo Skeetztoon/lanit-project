@@ -61,7 +61,7 @@ public class SecurityController {
                 return ResponseEntity.badRequest().body("Error during loading users");
             }
         } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("Error handling file" + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error handling file: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Unexpected server error");
         }

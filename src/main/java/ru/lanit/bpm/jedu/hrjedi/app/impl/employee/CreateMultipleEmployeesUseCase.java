@@ -29,8 +29,8 @@ public class CreateMultipleEmployeesUseCase implements CreateMultipleEmployeesIn
 
     @Override
     public void execute(List<UserJsonDTO> users) {
-        validateRegisteredLogins(users);
-        validateRegisteredEmails(users);
+        validateJsonContent(users);
+        validateRegisteredLoginsOrEmails(users);
         validateRoles(users);
 
         List<Employee> employees = users.stream()
@@ -44,23 +44,38 @@ public class CreateMultipleEmployeesUseCase implements CreateMultipleEmployeesIn
     // = Implementation
     // ===================================================================================================================
 
-    private void validateRegisteredLogins(List<UserJsonDTO> users) {
+    private void validateRequiredFields(UserJsonDTO user) {
+        if (user.getUsername() == null || user.getUsername().isBlank() ||
+            user.getFirstName() == null || user.getFirstName().isBlank() ||
+            user.getLastName() == null || user.getLastName().isBlank() ||
+            user.getEmail() == null || user.getEmail().isBlank() ||
+            user.getRoles() == null || user.getRoles().isEmpty()) {
+            throw new EmployeeRegistrationException("Missing required fields for some users");
+        }
+    }
+
+    private void validateJsonContent(List<UserJsonDTO> users) {
+        Set<String> uniqueLogins = new HashSet<>();
+        for (UserJsonDTO user : users) {
+            validateRequiredFields(user);
+            String login = user.getUsername().trim().toLowerCase();
+            if (!uniqueLogins.add(login)) {
+                throw new EmployeeRegistrationException("Duplicate logins found in the JSON file");
+            }
+        }
+    }
+
+    private void validateRegisteredLoginsOrEmails(List<UserJsonDTO> users) {
         Set<String> logins = users.stream()
             .map(user -> user.getUsername().trim().toLowerCase())
             .collect(Collectors.toSet());
 
-        if (employeeRepository.existsByLogins(logins)) {
-            throw new EmployeeRegistrationException("Some logins already exist");
-        }
-    }
-
-    private void validateRegisteredEmails(List<UserJsonDTO> users) {
         Set<String> emails = users.stream()
             .map(UserJsonDTO::getEmail)
             .collect(Collectors.toSet());
 
-        if (employeeRepository.existsByEmails(emails)) {
-            throw new EmployeeRegistrationException("Some emails already exist");
+        if (employeeRepository.existsByLoginsOrEmails(logins, emails)) {
+            throw new EmployeeRegistrationException("Some logins/emails already exist");
         }
     }
 

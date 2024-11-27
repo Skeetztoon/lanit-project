@@ -40,17 +40,12 @@ public class EmployeeRepositoryAdapter implements EmployeeRepository {
     }
 
     @Override
-    public boolean existsByLogins(Set<String> logins) {
-        return employeeJpaRepository.existsByLogins(logins);
-    }
-
-    @Override
     public boolean existsByEmail(String email) {
         return employeeJpaRepository.existsByEmail(email);
     }
 
     @Override
-    public boolean existsByEmails(Set<String> emails) {
-        return employeeJpaRepository.existsByEmails(emails);
+    public boolean existsByLoginsOrEmails(Set<String> logins, Set<String> emails) {
+        return employeeJpaRepository.existsByLoginsOrEmails(logins, emails);
     }
 }
