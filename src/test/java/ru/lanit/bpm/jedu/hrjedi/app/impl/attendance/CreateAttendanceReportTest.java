@@ -44,11 +44,13 @@ public class CreateAttendanceReportTest {
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
-        createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Workbook workbook = createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Sheet firstSheet = workbook.getSheetAt(0);
+
 
         verify(attendanceRepositoryAdapter).findAllByMonth(YEAR, Month.NOVEMBER.getValue());
-        assertEquals("Москва", attendanceList.get(0).getOffice().getName());
-        assertEquals("Севастополь", attendanceList.get(1).getOffice().getName());
+        assertEquals("Москва", firstSheet.getRow(3).getCell(2).getStringCellValue());
+        assertEquals("Севастополь", firstSheet.getRow(4).getCell(2).getStringCellValue());
     }
 
     @Test
@@ -60,11 +62,12 @@ public class CreateAttendanceReportTest {
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
-        createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Workbook workbook = createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Sheet firstSheet = workbook.getSheetAt(0);
 
         verify(attendanceRepositoryAdapter).findAllByMonth(YEAR, Month.NOVEMBER.getValue());
-        assertEquals("ivanov", attendanceList.get(0).getEmployee().getLastName());
-        assertEquals("petrov", attendanceList.get(1).getEmployee().getLastName());
+        assertEquals("ivanov ivan", firstSheet.getRow(3).getCell(0).getStringCellValue());
+        assertEquals("petrov petr", firstSheet.getRow(4).getCell(0).getStringCellValue());
     }
 
     @Test
@@ -76,11 +79,12 @@ public class CreateAttendanceReportTest {
 
         when(attendanceRepositoryAdapter.findAllByMonth(YEAR, Month.NOVEMBER.getValue())).thenReturn(attendanceList);
 
-        createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Workbook workbook = createAttendanceReportUseCase.execute(Month.NOVEMBER, YEAR);
+        Sheet firstSheet = workbook.getSheetAt(0);
 
         verify(attendanceRepositoryAdapter).findAllByMonth(YEAR, Month.NOVEMBER.getValue());
-        assertEquals("ivan", attendanceList.get(0).getEmployee().getFirstName());
-        assertEquals("petr", attendanceList.get(1).getEmployee().getFirstName());
+        assertEquals("petrov ivan", firstSheet.getRow(3).getCell(0).getStringCellValue());
+        assertEquals("petrov petr", firstSheet.getRow(4).getCell(0).getStringCellValue());
     }
 
     @Test

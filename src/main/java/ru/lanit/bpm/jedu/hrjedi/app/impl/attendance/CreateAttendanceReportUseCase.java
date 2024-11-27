@@ -42,12 +42,6 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
 
             List<String> officeOrder = List.of("Нижний Новгород", "Уфа", "Москва", "Севастополь");
 
-            attendanceList.sort(Comparator.comparing((Attendance a) -> officeOrder.indexOf(a.getOffice().getName()))
-                .thenComparing(a -> a.getEmployee().getLastName())
-                .thenComparing(a -> a.getEmployee().getFirstName())
-                .thenComparing(a -> a.getEmployee().getPatronymic(), Comparator.nullsLast(Comparator.naturalOrder()))
-            );
-
             XSSFWorkbook workbook = new XSSFWorkbook(attendanceTemplate);
             Sheet sheet1 = workbook.getSheetAt(0);
             Sheet sheet2 = workbook.getSheetAt(1);
@@ -95,9 +89,16 @@ public class CreateAttendanceReportUseCase implements CreateAttendanceReportInbo
                 }
             }
 
+            // Сортировка по офису и ФИО
+            List<Map.Entry<String, Integer>> sortedEmployees = hoursByEmployee.entrySet().stream()
+                .sorted(Comparator.comparing((Map.Entry<String, Integer> entry) ->
+                        officeOrder.indexOf(officeOfEmployee.get(entry.getKey())))
+                    .thenComparing(Map.Entry::getKey))
+                .toList();
+
             // заполнение первого листа
             int firstListRowCounter = 3;
-            for (Map.Entry<String, Integer> entry : hoursByEmployee.entrySet()) {
+            for (Map.Entry<String, Integer> entry : sortedEmployees) {
 
                 Row row = sheet1.createRow(firstListRowCounter);
                 Cell credentials = row.createCell(0);
